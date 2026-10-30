@@ -1,0 +1,163 @@
+{
+  "pilot": false,
+  "model": "facebook/bart-large-cnn",
+  "versions": {
+    "torch": "2.11.0+cu128",
+    "transformers": "5.16.1"
+  },
+  "gpu": "Tesla T4",
+  "data": {
+    "train": 1358,
+    "val": 159,
+    "test": 418,
+    "train_on_reps_only": true,
+    "eval_on_reps_only": true
+  },
+  "hyperparameters": {
+    "seed": 42,
+    "max_source_len": 1024,
+    "max_target_len": 192,
+    "epochs": 4,
+    "lr": 2e-05,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "batch_size": 2,
+    "grad_accum": 4,
+    "gradient_checkpointing": true,
+    "fp16": true
+  },
+  "generation": {
+    "num_beams": 4,
+    "no_repeat_ngram_size": 3,
+    "length_penalty": 2.0,
+    "min_new_tokens": 20,
+    "max_new_tokens": 160,
+    "early_stopping": true
+  },
+  "selection": "best epoch by mean of val ROUGE-1/2/L F1",
+  "best_epoch": 4,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.8093358570591866,
+      "val_loss": 1.6854641333222389,
+      "val_rouge": {
+        "rouge1": 0.4254093761887155,
+        "rouge2": 0.1955289935208334,
+        "rougeL": 0.28959669862273935,
+        "rougeLsum": 0.3805017406886895
+      },
+      "val_rouge_mean": 0.30351168944409607,
+      "minutes": 5.863629615306854
+    },
+    {
+      "epoch": 2,
+      "train_loss": 1.4224503014417742,
+      "val_loss": 1.7115632809698582,
+      "val_rouge": {
+        "rouge1": 0.4303077917697263,
+        "rouge2": 0.203620233010525,
+        "rougeL": 0.2992345815253213,
+        "rougeLsum": 0.3869141406642764
+      },
+      "val_rouge_mean": 0.31105420210185747,
+      "minutes": 5.753780738512675
+    },
+    {
+      "epoch": 3,
+      "train_loss": 1.1353953314810683,
+      "val_loss": 1.7777102015912534,
+      "val_rouge": {
+        "rouge1": 0.4327217145582648,
+        "rouge2": 0.20060580330856295,
+        "rougeL": 0.2901411897391553,
+        "rougeLsum": 0.3866393475354915
+      },
+      "val_rouge_mean": 0.3078229025353277,
+      "minutes": 5.995873248577118
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.9565791664576495,
+      "val_loss": 1.859769243746996,
+      "val_rouge": {
+        "rouge1": 0.4409887580969225,
+        "rouge2": 0.20612631867921274,
+        "rougeL": 0.30077858427075527,
+        "rougeLsum": 0.39495875512067974
+      },
+      "val_rouge_mean": 0.3159645536822968,
+      "minutes": 5.812424031893412
+    }
+  ],
+  "training_minutes": 23.554090309143067,
+  "peak_gpu_memory_gb": 8.156508672,
+  "test": {
+    "pretrained": {
+      "rouge1": {
+        "mean": 0.3981845102961306,
+        "ci95": [
+          0.38532782364557566,
+          0.4100276196567544
+        ]
+      },
+      "rouge2": {
+        "mean": 0.1712122083802672,
+        "ci95": [
+          0.1593719128149632,
+          0.18414572276894264
+        ]
+      },
+      "rougeL": {
+        "mean": 0.272878448737897,
+        "ci95": [
+          0.26076841237190423,
+          0.2843853754792674
+        ]
+      },
+      "rougeLsum": {
+        "mean": 0.35198519052318056,
+        "ci95": [
+          0.3408103535308547,
+          0.36465008259435455
+        ]
+      }
+    },
+    "finetuned": {
+      "rouge1": {
+        "mean": 0.4278901245423488,
+        "ci95": [
+          0.41612498903737155,
+          0.43887440800528743
+        ]
+      },
+      "rouge2": {
+        "mean": 0.1894413999896441,
+        "ci95": [
+          0.1771221721875553,
+          0.20140840164612672
+        ]
+      },
+      "rougeL": {
+        "mean": 0.2868847871656065,
+        "ci95": [
+          0.27558001095497087,
+          0.2974979269721288
+        ]
+      },
+      "rougeLsum": {
+        "mean": 0.3813308355550956,
+        "ci95": [
+          0.3698190173357813,
+          0.3926967171021141
+        ]
+      }
+    },
+    "paired_bootstrap_p_finetuned_better": {
+      "rouge1": 1.0,
+      "rouge2": 1.0,
+      "rougeL": 0.999,
+      "rougeLsum": 1.0
+    }
+  }
+}

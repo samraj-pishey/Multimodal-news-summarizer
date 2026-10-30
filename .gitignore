@@ -6,3 +6,5 @@ __pycache__/
 data/
 models/
 checkpoints/
+outputs/kaggle_bundle/
+.DS_Store

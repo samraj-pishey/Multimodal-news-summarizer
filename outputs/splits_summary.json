@@ -1,0 +1,41 @@
+{
+  "seed": 42,
+  "dm_ratios": {
+    "train": 0.9,
+    "val": 0.1
+  },
+  "cnn_ratios": {
+    "train": 0.7,
+    "val": 0.1,
+    "test": 0.2
+  },
+  "near_dup_jaccard": 0.3,
+  "shingle_size": 8,
+  "total_examples": 2224,
+  "unique_stories": 1935,
+  "near_duplicate_pairs": 892,
+  "official_test_ids": 394,
+  "official_test_ids_missing_locally": [
+    "dailymail/5884",
+    "dailymail/5886",
+    "dailymail/5891",
+    "dailymail/5924"
+  ],
+  "counts": {
+    "test": {
+      "cnn": 50,
+      "unique_stories": 418,
+      "dailymail": 550
+    },
+    "train": {
+      "cnn": 177,
+      "unique_stories": 1358,
+      "dailymail": 1280
+    },
+    "val": {
+      "cnn": 25,
+      "unique_stories": 159,
+      "dailymail": 142
+    }
+  }
+}

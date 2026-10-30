@@ -1,0 +1,189 @@
+{
+  "pilot": false,
+  "model": "facebook/bart-large-cnn",
+  "versions": {
+    "torch": "2.11.0+cu128",
+    "transformers": "5.16.1"
+  },
+  "gpu": "Tesla T4",
+  "data": {
+    "train": 1358,
+    "val": 159,
+    "test": 418,
+    "train_on_reps_only": true,
+    "eval_on_reps_only": true
+  },
+  "hyperparameters": {
+    "seed": 42,
+    "max_source_len": 1024,
+    "max_target_len": 192,
+    "epochs": 6,
+    "lr": 2e-05,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "batch_size": 2,
+    "grad_accum": 4,
+    "gradient_checkpointing": true,
+    "fp16": true
+  },
+  "generation": {
+    "num_beams": 4,
+    "no_repeat_ngram_size": 3,
+    "length_penalty": 2.0,
+    "min_new_tokens": 20,
+    "max_new_tokens": 160,
+    "early_stopping": true
+  },
+  "selection": "best epoch by mean of val ROUGE-1/2/L F1",
+  "best_epoch": 3,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.8104249825358216,
+      "val_loss": 1.7151251547038555,
+      "val_rouge": {
+        "rouge1": 0.43489096614055356,
+        "rouge2": 0.2009091398185361,
+        "rougeL": 0.29922376532652667,
+        "rougeLsum": 0.39016641094908466
+      },
+      "val_rouge_mean": 0.3116746237618721,
+      "minutes": 5.963891764481862
+    },
+    {
+      "epoch": 2,
+      "train_loss": 1.4505041160446555,
+      "val_loss": 1.7189712896943092,
+      "val_rouge": {
+        "rouge1": 0.434786587123372,
+        "rouge2": 0.20785262624090617,
+        "rougeL": 0.30367879898745975,
+        "rougeLsum": 0.3898802337181299
+      },
+      "val_rouge_mean": 0.31543933745057934,
+      "minutes": 5.851725741227468
+    },
+    {
+      "epoch": 3,
+      "train_loss": 1.1303454804754047,
+      "val_loss": 1.7741559758782386,
+      "val_rouge": {
+        "rouge1": 0.4421642047796819,
+        "rouge2": 0.21166549004310006,
+        "rougeL": 0.30210845021054444,
+        "rougeLsum": 0.3967134890026244
+      },
+      "val_rouge_mean": 0.31864604834444216,
+      "minutes": 5.9356601476669315
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.8922195305529329,
+      "val_loss": 1.910242273658514,
+      "val_rouge": {
+        "rouge1": 0.4302424899206308,
+        "rouge2": 0.1957773769962102,
+        "rougeL": 0.2884453358320291,
+        "rougeLsum": 0.38187650634459197
+      },
+      "val_rouge_mean": 0.30482173424962333,
+      "minutes": 5.883270498116811
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.7316280657834262,
+      "val_loss": 2.045068696141243,
+      "val_rouge": {
+        "rouge1": 0.4336712906683909,
+        "rouge2": 0.20073043177905667,
+        "rougeL": 0.2931217885606146,
+        "rougeLsum": 0.38845429120952646
+      },
+      "val_rouge_mean": 0.30917450366935406,
+      "minutes": 5.953104015191396
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.6276075364870948,
+      "val_loss": 2.1629995845258234,
+      "val_rouge": {
+        "rouge1": 0.4368013856591502,
+        "rouge2": 0.20046418208280375,
+        "rougeL": 0.2921193445887623,
+        "rougeLsum": 0.38902911282026637
+      },
+      "val_rouge_mean": 0.30979497077690543,
+      "minutes": 5.950254623095194
+    }
+  ],
+  "training_minutes": 35.664983399709065,
+  "peak_gpu_memory_gb": 8.157020672,
+  "test": {
+    "pretrained": {
+      "rouge1": {
+        "mean": 0.3998939593829915,
+        "ci95": [
+          0.38705447064919335,
+          0.41098402482241797
+        ]
+      },
+      "rouge2": {
+        "mean": 0.17121799320255013,
+        "ci95": [
+          0.15917299071125288,
+          0.18397922602994102
+        ]
+      },
+      "rougeL": {
+        "mean": 0.2677926783779918,
+        "ci95": [
+          0.256059430833698,
+          0.27920494113452876
+        ]
+      },
+      "rougeLsum": {
+        "mean": 0.355070449681404,
+        "ci95": [
+          0.3433251141330474,
+          0.3668958713903175
+        ]
+      }
+    },
+    "finetuned": {
+      "rouge1": {
+        "mean": 0.42475158015495784,
+        "ci95": [
+          0.41286279138457915,
+          0.4354236685705631
+        ]
+      },
+      "rouge2": {
+        "mean": 0.18777338241550223,
+        "ci95": [
+          0.17655952823674578,
+          0.20015371506754717
+        ]
+      },
+      "rougeL": {
+        "mean": 0.28752058827108784,
+        "ci95": [
+          0.2766606054502098,
+          0.29806022888000594
+        ]
+      },
+      "rougeLsum": {
+        "mean": 0.3773004860836376,
+        "ci95": [
+          0.3662455714353914,
+          0.3884121719843374
+        ]
+      }
+    },
+    "paired_bootstrap_p_finetuned_better": {
+      "rouge1": 1.0,
+      "rouge2": 0.999,
+      "rougeL": 1.0,
+      "rougeLsum": 1.0
+    }
+  }
+}
