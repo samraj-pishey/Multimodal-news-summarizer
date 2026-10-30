@@ -1,0 +1,6 @@
+{
+  "model": "openai/clip-vit-base-patch32",
+  "query": "title + first 2 sentences of the cleaned article",
+  "stories": 1690,
+  "minutes": 3.1
+}
