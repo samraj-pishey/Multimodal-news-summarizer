@@ -8,3 +8,6 @@ models/
 checkpoints/
 outputs/kaggle_bundle/
 .DS_Store
+
+# Annotation pages embed images (~8 MB each); rebuild with src/make_annotation.py
+outputs/annotation/*.html
