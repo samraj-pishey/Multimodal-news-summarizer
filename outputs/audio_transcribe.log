@@ -1,0 +1,71 @@
+0 already transcribed, 1673 to go
+Fetching 4 files:   0%|          | 0/4 [00:00<?, ?it/s]Fetching 4 files: 100%|██████████| 4/4 [00:00<00:00, 1252.31it/s]
+  25/1673 | 3 min | 7.5x realtime
+  50/1673 | 9 min | 6.8x realtime
+  75/1673 | 14 min | 6.7x realtime
+  100/1673 | 22 min | 6.3x realtime
+  125/1673 | 29 min | 6.0x realtime
+  150/1673 | 36 min | 5.6x realtime
+  175/1673 | 45 min | 5.6x realtime
+  200/1673 | 51 min | 5.5x realtime
+  225/1673 | 56 min | 5.5x realtime
+  250/1673 | 64 min | 5.3x realtime
+291 already transcribed, 1382 to go
+Fetching 4 files:   0%|          | 0/4 [00:00<?, ?it/s]Fetching 4 files: 100%|██████████| 4/4 [00:00<00:00, 1344.54it/s]
+  25/1382 | 4 min | 6.1x realtime
+  50/1382 | 9 min | 5.9x realtime
+  75/1382 | 14 min | 5.3x realtime
+  100/1382 | 19 min | 5.4x realtime
+  125/1382 | 25 min | 5.2x realtime
+  150/1382 | 33 min | 4.6x realtime
+  175/1382 | 36 min | 4.8x realtime
+  200/1382 | 43 min | 4.6x realtime
+  225/1382 | 55 min | 4.1x realtime
+546 already transcribed, 1127 to go
+Fetching 4 files:   0%|          | 0/4 [00:00<?, ?it/s]Fetching 4 files: 100%|██████████| 4/4 [00:00<00:00, 1196.92it/s]
+  25/1127 | 4 min | 4.9x realtime
+  50/1127 | 10 min | 4.9x realtime
+  75/1127 | 16 min | 4.8x realtime
+  100/1127 | 22 min | 4.4x realtime
+  125/1127 | 27 min | 4.4x realtime
+  150/1127 | 33 min | 4.3x realtime
+  175/1127 | 37 min | 4.5x realtime
+  200/1127 | 45 min | 4.3x realtime
+  225/1127 | 52 min | 4.2x realtime
+  250/1127 | 57 min | 4.3x realtime
+  275/1127 | 61 min | 4.4x realtime
+  300/1127 | 67 min | 4.4x realtime
+  325/1127 | 76 min | 4.3x realtime
+  350/1127 | 83 min | 4.2x realtime
+  375/1127 | 88 min | 4.2x realtime
+  400/1127 | 96 min | 4.1x realtime
+  425/1127 | 102 min | 4.1x realtime
+  450/1127 | 106 min | 4.2x realtime
+  475/1127 | 111 min | 4.2x realtime
+  500/1127 | 115 min | 4.3x realtime
+  525/1127 | 119 min | 4.4x realtime
+  550/1127 | 125 min | 4.4x realtime
+  575/1127 | 129 min | 4.4x realtime
+  600/1127 | 134 min | 4.4x realtime
+  625/1127 | 138 min | 4.5x realtime
+  650/1127 | 144 min | 4.5x realtime
+  675/1127 | 148 min | 4.5x realtime
+  700/1127 | 153 min | 4.5x realtime
+  725/1127 | 158 min | 4.5x realtime
+  750/1127 | 163 min | 4.6x realtime
+  775/1127 | 168 min | 4.6x realtime
+  800/1127 | 173 min | 4.6x realtime
+  825/1127 | 178 min | 4.6x realtime
+  850/1127 | 183 min | 4.6x realtime
+  875/1127 | 188 min | 4.6x realtime
+  900/1127 | 193 min | 4.6x realtime
+  925/1127 | 200 min | 4.5x realtime
+  950/1127 | 206 min | 4.5x realtime
+  975/1127 | 210 min | 4.5x realtime
+  1000/1127 | 216 min | 4.5x realtime
+  1025/1127 | 220 min | 4.6x realtime
+  1050/1127 | 225 min | 4.6x realtime
+  1075/1127 | 230 min | 4.6x realtime
+  1100/1127 | 236 min | 4.6x realtime
+  1125/1127 | 241 min | 4.6x realtime
+Done in 241 min -> /Users/samrajpishey/Multimodal-news-summarizer/outputs/audio/whisper_transcripts.jsonl
