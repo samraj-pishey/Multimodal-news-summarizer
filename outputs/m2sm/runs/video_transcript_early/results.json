@@ -1,0 +1,120 @@
+{
+ "config": {
+  "name": "video_transcript_early",
+  "regime": "paper",
+  "no_video": false,
+  "no_transcript": false,
+  "no_bistream": true,
+  "attention": "bilinear",
+  "fusion": "early",
+  "beta": 0.3,
+  "alpha_ratio": 3.33,
+  "lr": 0.0001,
+  "optimizer": "adagrad",
+  "batch_size": 1,
+  "epochs": 30,
+  "patience": 5,
+  "seed": 42,
+  "threads": 6,
+  "limit_train": 0,
+  "limit_val": 0,
+  "no_test": false
+ },
+ "best_epoch": 1,
+ "best_val": 30.24581683002029,
+ "history": [
+  {
+   "epoch": 1,
+   "train_loss": 0.4791700443399575,
+   "val": {
+    "r1": 41.11368809966941,
+    "r2": 18.39421299893752,
+    "rl": 31.229549391453943
+   },
+   "val_size": 4,
+   "val_value": 30.24581683002029,
+   "seconds": 132.1876139640808,
+   "reward": null
+  },
+  {
+   "epoch": 2,
+   "train_loss": 0.440090581697958,
+   "val": {
+    "r1": 41.08143003515328,
+    "r2": 18.379554439891123,
+    "rl": 31.205272703725313
+   },
+   "val_size": 4,
+   "val_value": 30.22208572625657,
+   "seconds": 132.54589080810547,
+   "reward": null
+  },
+  {
+   "epoch": 3,
+   "train_loss": 0.41666435027622495,
+   "val": {
+    "r1": 41.08143003515328,
+    "r2": 18.379554439891123,
+    "rl": 31.205272703725313
+   },
+   "val_size": 4,
+   "val_value": 30.22208572625657,
+   "seconds": 133.86843705177307,
+   "reward": null
+  },
+  {
+   "epoch": 4,
+   "train_loss": 0.3975806292516506,
+   "val": {
+    "r1": 41.08143003515328,
+    "r2": 18.379554439891123,
+    "rl": 31.205272703725313
+   },
+   "val_size": 4,
+   "val_value": 30.22208572625657,
+   "seconds": 132.8988597393036,
+   "reward": null
+  },
+  {
+   "epoch": 5,
+   "train_loss": 0.3831225214765912,
+   "val": {
+    "r1": 41.08143003515328,
+    "r2": 18.379554439891123,
+    "rl": 31.205272703725313
+   },
+   "val_size": 4,
+   "val_value": 30.22208572625657,
+   "seconds": 132.18143010139465,
+   "reward": null
+  },
+  {
+   "epoch": 6,
+   "train_loss": 0.37323005004587906,
+   "val": {
+    "r1": 41.08143003515328,
+    "r2": 18.379554439891123,
+    "rl": 31.205272703725313
+   },
+   "val_size": 4,
+   "val_value": 30.22208572625657,
+   "seconds": 131.34065413475037,
+   "reward": null
+  }
+ ],
+ "train_stories": 1359,
+ "val_stories": 194,
+ "summary_size": 4,
+ "test_dailymail": {
+  "n": 387,
+  "r1": 39.86193707358901,
+  "r2": 17.733764894767408,
+  "rl": 30.718796408980296
+ },
+ "test_cnn": {
+  "n": 204,
+  "r1": 23.91847575215991,
+  "r2": 9.076558183122474,
+  "rl": 18.79903091382831
+ }
+}
