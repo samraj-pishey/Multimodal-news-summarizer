@@ -21,7 +21,7 @@
 
 \begin{document}
 
-\title{Multimodal NLP Framework for Automated Article Generation from Heterogeneous Sources\thanks{An AI assistant (Claude, Anthropic) was used to draft the text of this paper. The authors reviewed the text and results and take responsibility for them.}}
+\title{Multimodal News Summarization with Relevance-Filtered Heterogeneous Sources\thanks{An AI assistant (Claude, Anthropic) was used to draft the text of this paper. The authors reviewed the text and results and take responsibility for them.}}
 
 \author{
 \IEEEauthorblockN{1\textsuperscript{st} S Samraj Pishey}
@@ -62,7 +62,7 @@ multimodal summarization, abstractive summarization, BART, CLIP, Whisper, MM-AVS
 
 % ===========================================================================
 \section{Introduction}
-Online news rarely consists of text alone. A typical story combines an article with photographs, captions and an embedded video, and each of these sources can carry information about what matters in the story. A system that generates articles or summaries from such heterogeneous sources has to decide which of them to use and how to combine them. As a first task for such a framework, we study multimodal news summarization on MM-AVS~\cite{fu2021mmavs}, a public dataset that packages all of these modalities for CNN and Daily Mail stories.
+Online news rarely consists of text alone. A typical story combines an article with photographs, captions and an embedded video, and each of these sources can carry information about what matters in the story. A summarizer that draws on such heterogeneous sources has to decide which of them to use and how to combine them. We study multimodal news summarization on MM-AVS~\cite{fu2021mmavs}, a public dataset that packages all of these modalities for CNN and Daily Mail stories.
 
 Pretrained text models such as BART~\cite{lewis2020bart}, PEGASUS~\cite{zhang2020pegasus} and T5~\cite{raffel2020t5} perform well on news but see only the article. Multimodal models usually fuse visual features inside the encoder~\cite{yu2021vgbart,liang2023sov}, which adds parameters and training cost. There is also a less discussed problem: the extra material is not always about the story. In our data, only about half of the speech transcripts are measurably related to their article, and many videos are generic clips. Adding a modality without checking it can therefore add noise.
 
@@ -190,7 +190,7 @@ Relevance $r(t,a)$ is the cosine similarity between the TF-IDF vectors of transc
 \tau = P_{99}\left(\{\, r(t_i, a_{\pi(i)}) : \pi(i)\neq i \,\}\right),
 \label{eq:tau}
 \end{equation}
-which gives $\tau=0.10$ over 907 training pairs. A transcript is kept only if $r(t,a)>\tau$, so it must resemble its article more than 99\% of random pairings do. The vocabulary and threshold use training data only, and all settings were fixed before any summarization result was seen. We compare all transcripts, relevant transcripts only, and \texttt{clip\_top2} combined with relevant transcripts.
+which gives $\tau=0.10$ over 907 training pairs. A transcript is kept only if $r(t,a)>\tau$, so it must resemble its article more than 99\% of random pairings do. The vocabulary and threshold use training data only, and all settings were fixed before any transcript-variant result was seen. We compare all transcripts, relevant transcripts only, and \texttt{clip\_top2} combined with relevant transcripts.
 
 % ===========================================================================
 \section{Experimental Setup}
@@ -416,7 +416,7 @@ Converting images and speech to text and filtering them for relevance improves n
 
 These results have limits. Part of the caption gain reflects reuse of caption text in reference highlights, so we recommend that work on MM-AVS report results with and without such stories. We relied on ROUGE without human rating of summary quality, images and audio exist only for Daily Mail, each variant used one seed, the relevance filter is lexical, the cover-image study had three annotators, and only 49 CNN stories were available for testing.
 
-Future work will add human evaluation of summaries, video frames, factual-consistency measures~\cite{kryscinski2020factcc}, generated captions~\cite{li2022blip} for images without captions, and a semantic relevance filter. We also plan to extend the framework from summaries to longer generated articles.
+Future work will add human evaluation of summaries, video frames, factual-consistency measures~\cite{kryscinski2020factcc}, generated captions~\cite{li2022blip} for images without captions, and a semantic relevance filter.
 
 % ===========================================================================
 \bibliographystyle{IEEEtran}
