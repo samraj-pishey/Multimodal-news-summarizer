@@ -327,12 +327,19 @@ MM-AVS is used for research and is **not redistributed** in this repository. The
 ### Papers this work builds on
 
 ```bibtex
-@inproceedings{fu2020m2sm,
-  title     = {Multi-modal Summarization for Video-containing Documents},
+@article{fu2020m2sm,
+  title   = {Multi-modal Summarization for Video-containing Documents},
+  author  = {Fu, Xiyan and Wang, Jun and Yang, Zhenglu},
+  journal = {arXiv preprint arXiv:2009.08018},
+  year    = {2020}
+}
+
+@inproceedings{fu2021mmavs,
+  title     = {{MM-AVS}: A Full-Scale Dataset for Multi-modal Summarization},
   author    = {Fu, Xiyan and Wang, Jun and Yang, Zhenglu},
   booktitle = {Proceedings of NAACL-HLT},
-  year      = {2021},
-  note      = {arXiv:2009.08018}
+  pages     = {5922--5926},
+  year      = {2021}
 }
 
 @inproceedings{he2023a2summ,

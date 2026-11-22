@@ -5,7 +5,7 @@ The dataset is **not included** in this repository. Download it from the officia
 ## MM-AVS
 
 - Source: <https://github.com/xiyan-fu/MM-AVS>, which links to the authors' download.
-- Paper: Fu, Wang & Yang, *Multi-modal Summarization for Video-containing Documents*, NAACL 2021.
+- Paper: Fu, Wang & Yang, *MM-AVS: A Full-Scale Dataset for Multi-modal Summarization*, NAACL 2021.
 - Size: about 27 GB, mostly video.
 
 Unpack it so that the folders look like this:
