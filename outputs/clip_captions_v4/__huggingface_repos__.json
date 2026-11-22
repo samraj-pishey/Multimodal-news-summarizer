@@ -1,1 +1,0 @@
-{"repos": [{"repoId": "facebook/bart-large-cnn", "repoType": "model", "commitHash": "37f520fa929c961707657b28798b30c003dd100b", "filePaths": ["model.safetensors", "merges.txt", "config.json", "generation_config.json", "tokenizer.json", "vocab.json"]}]}

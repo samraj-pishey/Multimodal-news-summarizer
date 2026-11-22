@@ -12,7 +12,7 @@ const MIN_SPEECH_WORDS = 5;
 const AUDIO_RATE = 16000;
 const MEAN = [0.485, 0.456, 0.406];
 const STD = [0.229, 0.224, 0.225];
-const ABBREVIATION = /(?:\b(?:Mr|Mrs|Ms|Dr|Prof|Sen|Rep|Gov|Gen|Col|Lt|St|Jr|Sr|No|vs|etc|e\.g|i\.e|Jan|Feb|Mar|Apr|Aug|Sept?|Oct|Nov|Dec)|\b[A-Z](?:\.[A-Z])*)\.$/;
+const ABBREVIATION = /(?:\b(?:Mr|Mrs|Ms|Dr|Prof|Sen|Rep|Gov|Gen|Col|Lt|St|Mt|Jr|Sr|No|vs|etc|e\.g|i\.e|a\.m|p\.m|a\.k\.a|approx|Inc|Ltd|Corp|Co|Dept|Jan|Feb|Mar|Apr|Aug|Sept?|Oct|Nov|Dec)|\b[A-Z](?:\.[A-Z])*)\.$/;
 const UPLOAD_STEPS = ["Loading models", "Reading the PDF", "Sampling video frames", "Transcribing the audio", "Selecting sentences and frames"];
 const ARTICLE_STEPS = ["Loading the model", "Reading the PDF", "Selecting sentences"];
 const VIDEO_STEPS = ["Loading models", "Sampling video frames", "Transcribing the audio", "Selecting sentences and frames"];
@@ -94,8 +94,21 @@ function bodyLines(pages) {
   return pages.flat().filter((line) => !repeated(line) && !/^(?:page\s*)?\d+(?:\s*(?:of|\/)\s*\d+)?$/i.test(line));
 }
 
+// A short line with no closing punctuation, standing between paragraphs, is a headline or byline, not a sentence.
+function dropHeadings(lines) {
+  const ends = /[.!?:;"”’)]$/;
+  let previousWasHeading = false;
+  return lines.filter((line, i) => {
+    const short = line.split(/\s+/).length <= 12;
+    const startsParagraph = i === 0 || ends.test(lines[i - 1]) || previousWasHeading;
+    const nextStartsNew = i + 1 >= lines.length || /^[A-Z0-9"“‘]/.test(lines[i + 1]);
+    previousWasHeading = short && !ends.test(line) && startsParagraph && nextStartsNew;
+    return !previousWasHeading;
+  });
+}
+
 function splitSentences(lines) {
-  const text = lines.join("\n").replace(/([a-z])-\n([a-z])/g, "$1$2").replace(/\s+/g, " ")
+  const text = dropHeadings(lines).join("\n").replace(/([a-z])-\n([a-z])/g, "$1$2").replace(/\s+/g, " ")
     .replace(/([a-z0-9)'"”’][.!?])([A-Z])/g, "$1 $2").trim();      // scraped articles glue sentences: "sideline.Feki"
   const segmenter = new Intl.Segmenter("en", { granularity: "sentence" });
   const merged = [];
@@ -206,26 +219,29 @@ async function readAudio(file) {
   return samples;
 }
 
+const NO_SPEECH = { text: "", segments: [] };
+
+// Whisper's text plus its timed segments ({ start, end, text } in seconds).
 async function transcribeVideo(file, step, notes) {
   if (file.size > MAX_AUDIO_FILE_BYTES) {
     notes.push("The video is over 500 MB, so its audio was skipped and the model used the frames alone.");
-    return "";
+    return NO_SPEECH;
   }
   let audio;
   try {
     audio = await readAudio(file);
   } catch {
     notes.push("No audio could be read from the video, so the model used the frames alone.");
-    return "";
+    return NO_SPEECH;
   }
   try {
     const onProgress = (percent) => step(percent === null ? "running" : `downloading Whisper ${percent}%`);
-    const text = await ask("transcribe", { audio }, { transfer: [audio.buffer], onProgress });
-    if (!text) notes.push("No speech was found in the video, so the model used the frames alone.");
-    return text;
+    const speech = await ask("transcribe", { audio }, { transfer: [audio.buffer], onProgress });
+    if (!speech.text) notes.push("No speech was found in the video, so the model used the frames alone.");
+    return speech;
   } catch (error) {
     notes.push(`Transcription failed (${error.message}), so the model used the frames alone.`);
-    return "";
+    return NO_SPEECH;
   }
 }
 
@@ -275,6 +291,16 @@ function renderSummary() {
 
   renderStrip($("sentence-strip"), $("sentence-readout"), sentenceLogits, chosen,
     (i, value) => `Sentence ${i + 1}, score ${value.toFixed(2)}: ${tidy(sentences[i])}`);
+  $("strip-end").textContent = `Sentence ${sentences.length}`;
+
+  const words = (list) => list.reduce((total, text) => total + text.split(/\s+/).filter(Boolean).length, 0);
+  const kept = words(picks.map((i) => sentences[i]));
+  const total = words(sentences);
+  const chip = (text) => Object.assign(document.createElement("span"), { textContent: text });
+  $("summary-stats").replaceChildren(
+    chip(`${count} of ${sentences.length} sentences`),
+    chip(`${kept} of ${total} words`),
+    chip(`${Math.max(0, Math.round(100 * (1 - kept / Math.max(1, total))))}% shorter`));
 
   if (rouge) {
     const row = (name, scores) => {
@@ -284,6 +310,9 @@ function renderSummary() {
       return tr;
     };
     $("rouge").replaceChildren(row("Model", rouge.model[count]), row(`First ${count} sentence${count === 1 ? "" : "s"}`, rouge.lead[count]));
+    $("rouge-note").textContent = outside === 0
+      ? `Here the model picked exactly the first ${count === 1 ? "sentence" : `${count} sentences`}, so both rows match. News puts key facts first, which makes this baseline hard to beat.`
+      : "";
   }
 
   $("article").replaceChildren(...sentences.flatMap((sentence, i) => {
@@ -308,7 +337,7 @@ function showResult(result) {
   $("text-results").hidden = !hasText;
   $("length-control").hidden = !hasText;
   $("frames-block").hidden = result.images.length === 0;
-  $("sentence-hint").textContent = `One bar per sentence, in ${fromSpeech ? "the order spoken" : "article order"}. Dark bars are in the summary.`;
+  $("sentence-hint").textContent = `One bar per sentence, in ${fromSpeech ? "the order spoken" : "article order"}. Hover a bar to read it.`;
   $("full-text-title").textContent = fromSpeech ? "Full transcript, with selected sentences marked" : "Full article, with selected sentences marked";
   if (hasText) {
     $("length").max = Math.min(8, result.sentences.length);
@@ -331,9 +360,127 @@ function showResult(result) {
   }));
 
   $("transcript").textContent = result.transcript;
-  $("transcript-block").hidden = !result.transcript || fromSpeech;
+  renderSpeech(result);
+  $("transcript-block").hidden = !result.transcript || fromSpeech || !$("speech-block").hidden;
+  const inputs = result.inputs ?? ["article"];
+  $("inputs-used").replaceChildren(Object.assign(document.createElement("span"), { textContent: `Read: ${inputs.join(" · ")}` }));
+  resetAbstract(result);
+  document.querySelectorAll(".jump a[data-for]").forEach((link) => { link.hidden = $(link.dataset.for).hidden; });
+  $("welcome").hidden = true;
   $("results").hidden = false;
 }
+
+// What was said: the speech as timed lines. Clicking a line shows that moment of the video: a fresh frame for
+// uploads, or the nearest saved frame for sample stories (which keep only a few).
+function renderSpeech(result) {
+  const segments = result.speech ?? [];
+  const block = $("speech-block");
+  block.hidden = !segments.length && !result.transcript;
+  $("speech-preview").hidden = true;
+  if (block.hidden) return;
+  $("speech-hint").textContent = segments.length
+    ? (result.speechNote ?? "Written out by Whisper in your browser.") + " Click a line to see that moment of the video."
+    : "The speech for this story has no timestamps, so it is shown as plain text.";
+  if (!segments.length) {
+    $("speech-list").replaceChildren(Object.assign(document.createElement("li"), { className: "plain", textContent: result.transcript }));
+    return;
+  }
+  $("speech-list").replaceChildren(...segments.map((segment) => {
+    const item = document.createElement("li");
+    const button = Object.assign(document.createElement("button"), { type: "button" });
+    button.append(Object.assign(document.createElement("span"), { className: "time", textContent: `${formatTime(segment.start)}–${formatTime(segment.end)}` }),
+      Object.assign(document.createElement("span"), { textContent: segment.text }));
+    button.addEventListener("click", () => previewMoment(result, segment, item));
+    item.append(button);
+    return item;
+  }));
+}
+
+async function previewMoment(result, segment, item) {
+  document.querySelectorAll("#speech-list li").forEach((li) => li.classList.toggle("on", li === item));
+  const figure = $("speech-preview");
+  const image = figure.querySelector("img");
+  const caption = figure.querySelector("figcaption");
+  if (result.live) {
+    image.src = await thumbnail($("player"), segment.start);
+    caption.textContent = `The video at ${formatTime(segment.start)}`;
+  } else {
+    const frames = result.previewFrames ?? result.images;
+    if (!frames.length) return;
+    const nearest = frames.reduce((best, frame) => (Math.abs(frame.time - segment.start) < Math.abs(best.time - segment.start) ? frame : best));
+    image.src = nearest.src;
+    caption.textContent = `Nearest saved frame: ${formatTime(nearest.time)}`;
+  }
+  image.alt = caption.textContent;
+  figure.hidden = false;
+}
+
+// Abstractive summary: hidden until the user asks for it. Sample stories carry a BART-large-CNN summary made
+// offline; uploads run the smaller DistilBART in the worker, downloaded on first use.
+const MAX_ABSTRACT_WORDS = 700;       // stays under BART's 1,024-token input limit
+
+function resetAbstract(result) {
+  const button = $("ai-button");
+  $("ai-column").hidden = true;
+  button.hidden = false;
+  button.disabled = false;
+  button.textContent = "✨ Write a condensed summary with AI";
+  $("ai-hint").textContent = result.abstractive
+    ? "Shows a summary written by BART-large-CNN, a pretrained abstractive model."
+    : "Runs DistilBART, a smaller abstractive model, in your browser. The first time it downloads about 270 MB; after that it's cached.";
+}
+
+function showAbstract(text, model, scores) {
+  $("ai-model").textContent = model;
+  $("ai-text").textContent = text;
+  const count = Math.min(state.length, state.result.sentences.length);
+  $("ai-score").textContent = scores && state.result.rouge
+    ? `ROUGE-1 against the human summary: ${scores.r1.toFixed(1)} (the selected sentences above: ${state.result.rouge.model[count].r1.toFixed(1)}).`
+    : "";
+  $("ai-button").hidden = true;
+  $("ai-hint").textContent = "";
+  $("ai-column").hidden = false;
+}
+
+async function writeAbstract() {
+  const result = state.result;
+  const button = $("ai-button");
+  if (result.abstractive) {
+    showAbstract(result.abstractive.text, result.abstractive.model, result.abstractive);
+    return;
+  }
+  button.disabled = true;
+  button.textContent = "Preparing…";
+  try {
+    const text = result.sentences.join(" ").split(/\s+/).slice(0, MAX_ABSTRACT_WORDS).join(" ");
+    const summary = await ask("abstract", { text }, { onProgress: (percent) => {
+      button.textContent = percent === null ? "Writing the summary…" : `Downloading the AI model ${percent}%`;
+    } });
+    if (state.result === result) showAbstract(summary, "DistilBART, running in your browser");
+  } catch (error) {
+    if (state.result !== result) return;
+    button.disabled = false;
+    button.textContent = "✨ Try again";
+    $("ai-hint").textContent = `The AI summary couldn't be written (${error.message}).`;
+  }
+}
+
+$("ai-button").addEventListener("click", writeAbstract);
+
+// Upload drop zones: the real file input covers each zone, so clicking and dropping both work natively.
+document.querySelectorAll(".drop").forEach((zone) => {
+  const input = zone.querySelector("input");
+  const label = zone.querySelector(".drop-file");
+  const show = () => {
+    const file = input.files[0];
+    zone.classList.toggle("has-file", Boolean(file));
+    const size = file && (file.size < 2 ** 20 ? `${Math.max(1, Math.round(file.size / 1024))} KB` : `${(file.size / 2 ** 20).toFixed(1)} MB`);
+    label.textContent = file ? `${file.name} · ${size}` : zone.dataset.empty;
+  };
+  input.addEventListener("change", show);
+  ["dragenter", "dragover"].forEach((type) => zone.addEventListener(type, () => zone.classList.add("over")));
+  ["dragleave", "drop"].forEach((type) => zone.addEventListener(type, () => zone.classList.remove("over")));
+});
 
 function showNotes(notes) {
   $("notes").replaceChildren(...notes.map((note) => Object.assign(document.createElement("li"), { textContent: note })));
@@ -384,7 +531,7 @@ async function runVideoOnly(videoFile) {
   if (truncated) notes.push("The video is over 10 minutes; only the first 10 were used.");
 
   setStep(2);
-  const transcript = await transcribeVideo(videoFile, (detail) => setStep(2, detail), notes);
+  const { text: transcript, segments: speech } = await transcribeVideo(videoFile, (detail) => setStep(2, detail), notes);
   const spoken = speechSentences(transcript).slice(0, config.max_sentences);
   const words = spoken.reduce((total, sentence) => total + sentence.split(/\s+/).length, 0);
   const sentences = words >= MIN_SPEECH_WORDS ? spoken : [];
@@ -400,7 +547,8 @@ async function runVideoOnly(videoFile) {
   const frameIndices = await ask("vsumm", { count: FRAMES_SHOWN });
   const images = [];
   for (const i of frameIndices) images.push({ time: times[i], src: await thumbnail($("player"), times[i]) });
-  showResult({ sentenceLogits, frameLogits: [], sentences, transcript, times, images, frameIndices, source: "speech",
+  showResult({ sentenceLogits, frameLogits: [], sentences, transcript, speech, live: true, times, images, frameIndices,
+               source: "speech", inputs: ["video", ...(transcript ? ["speech"] : [])],
                defaultLength: config.modes.speech.summary_size });
   showNotes(notes);
   setStep(VIDEO_STEPS.length);
@@ -426,14 +574,15 @@ async function runUpload(pdf, videoFile) {
   if (truncated) notes.push("The video is over 10 minutes; only the first 10 were used.");
 
   setStep(3);
-  const transcript = await transcribeVideo(videoFile, (detail) => setStep(3, detail), notes);
+  const { text: transcript, segments: speech } = await transcribeVideo(videoFile, (detail) => setStep(3, detail), notes);
 
   setStep(4);
   const output = await ask("summarize", { sentences, transcript });
   const frameIndices = topIndices(output.frameLogits, FRAMES_SHOWN).sort((a, b) => a - b);
   const images = [];
   for (const i of frameIndices) images.push({ time: times[i], src: await thumbnail($("player"), times[i]) });
-  showResult({ ...output, sentences, transcript, times, images, frameIndices, defaultLength: config.summary_size });
+  showResult({ ...output, sentences, transcript, speech, live: true, times, images, frameIndices,
+               inputs: ["article", "video", ...(output.usedTranscript ? ["speech"] : [])], defaultLength: config.summary_size });
   showNotes(notes);
   setStep(UPLOAD_STEPS.length);
 }
@@ -455,7 +604,10 @@ async function runSample(sample) {
     .filter((i) => byTime.has(sample.times[i])).slice(0, FRAMES_SHOWN).sort((a, b) => a - b);
   const images = frameIndices.map((i) => ({ time: sample.times[i], src: `samples/${byTime.get(sample.times[i])}` }));
   showResult({ ...output, title: sample.title, sentences: sample.sentences, transcript: sample.transcript,
-               times: sample.times, images, frameIndices, human: sample.human, rouge: sample.rouge,
+               times: sample.times, images, frameIndices, human: sample.human, rouge: sample.rouge, abstractive: sample.abstractive,
+               speech: sample.speech, inputs: ["article", "video", ...(output.usedTranscript ? ["speech"] : [])],
+               previewFrames: sample.frames.map((frame) => ({ time: frame.time, src: `samples/${frame.file}` })),
+               speechNote: "Times come from Whisper. For sample stories the model read the transcript supplied with the dataset.",
                defaultLength: config.summary_size });
   setStep(SAMPLE_STEPS.length);
 }
@@ -482,6 +634,8 @@ function setMode(mode) {
   document.querySelectorAll(".nav").forEach((item) => item.classList.toggle("active", item.dataset.mode === mode));
   $("samples-panel").hidden = mode !== "samples";
   $("upload-panel").hidden = mode !== "upload";
+  $("explain-panel").hidden = mode !== "explain";
+  $("welcome").hidden = mode === "explain";
   $("results").hidden = true;
   $("error").hidden = true;
   $("notes").hidden = true;
@@ -494,18 +648,8 @@ function describeSample(sample) {
 }
 
 async function start() {
-  const [config, library] = await Promise.all([
-    fetch("models/config.json").then((r) => r.json()),
-    fetch("samples/samples.json").then((r) => r.json()),
-  ]);
+  const library = await fetch("samples/samples.json").then((r) => r.json());
   state.samples = library.samples;
-  const test = config.test_dailymail;
-  const facts = [["Run", config.run.replace("m2sm_", "")], ["Test stories", test.n], ["ROUGE-1", test.r1.toFixed(1)], ["ROUGE-2", test.r2.toFixed(1)], ["ROUGE-L", test.rl.toFixed(1)]];
-  $("facts").replaceChildren(...facts.flatMap(([name, value]) => [
-    Object.assign(document.createElement("dt"), { textContent: name }),
-    Object.assign(document.createElement("dd"), { textContent: value }),
-  ]));
-  $("lead-fact").textContent = `Trained on MM-AVS Daily Mail stories (Fu et al. 2020). On ${library.lead_matches} of ${library.lead_total} test stories its summary is the article's first ${config.summary_size} sentences.`;
   $("sample").replaceChildren(...library.samples.map((sample, i) => Object.assign(document.createElement("option"), {
     value: i, textContent: `${i + 1}. ${sample.title}`,
   })));

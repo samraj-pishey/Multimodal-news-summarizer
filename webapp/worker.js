@@ -3,6 +3,8 @@ import * as ort from "./vendor/ort.wasm.min.mjs";
 import { vsummFrames } from "./vsumm.js";
 
 const WHISPER_MODEL = "Xenova/whisper-tiny.en";
+const ABSTRACT_MODEL = "Xenova/distilbart-cnn-6-6";
+let abstracter = null;
 const UNK = 1;
 
 ort.env.wasm.wasmPaths = new URL("./vendor/", import.meta.url).href;
@@ -111,9 +113,31 @@ async function transcribe(audio, report) {
     },
   });
   report(null);
-  const { text } = await recognizer(audio, { chunk_length_s: 30, stride_length_s: 5 });
+  const output = await recognizer(audio, { chunk_length_s: 30, stride_length_s: 5, return_timestamps: true });
   await recognizer.dispose();
-  return text.trim();
+  // Each chunk is a stretch of speech with its [start, end] time in seconds.
+  const segments = (output.chunks ?? []).map((chunk) => ({
+    start: chunk.timestamp?.[0] ?? 0, end: chunk.timestamp?.[1] ?? chunk.timestamp?.[0] ?? 0, text: chunk.text.trim(),
+  })).filter((segment) => segment.text);
+  return { text: output.text.trim(), segments };
+}
+
+// Abstractive summary with DistilBART (8-bit), loaded once on first use. Settings follow the greedy decoding
+// chosen for BART-large-CNN on validation stories.
+async function abstract(text, report) {
+  if (!abstracter) {
+    const { pipeline } = await import("./vendor/transformers.min.js");
+    abstracter = await pipeline("summarization", ABSTRACT_MODEL, {
+      dtype: "q8",
+      device: "wasm",
+      progress_callback: (event) => {
+        if (event.status === "progress" && event.file?.endsWith(".onnx")) report(Math.round(event.progress));
+      },
+    });
+  }
+  report(null);
+  const [output] = await abstracter(text, { max_new_tokens: 142, min_length: 56, no_repeat_ngram_size: 3, num_beams: 1 });
+  return output.summary_text.trim();
 }
 
 const handlers = {
@@ -126,6 +150,7 @@ const handlers = {
   summarize: ({ sentences, transcript, variant }) => summarize(sentences, transcript, variant),
   vsumm: ({ count }) => vsummFrames(allFrames(), count),
   transcribe: ({ audio }, id) => transcribe(audio, (percent) => self.postMessage({ id, progress: percent })),
+  abstract: ({ text }, id) => abstract(text, (percent) => self.postMessage({ id, progress: percent })),
 };
 
 self.onmessage = async ({ data: { id, type, ...payload } }) => {

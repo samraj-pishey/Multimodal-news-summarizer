@@ -10,28 +10,44 @@
 <body>
   <aside class="rail">
     <div class="brand">
-      <span class="mark">M<sup>2</sup></span>
-      <div><strong>News Summarizer</strong><small>Multimodal · M2SM</small></div>
+      <svg class="mark" viewBox="0 0 44 44" aria-hidden="true">
+        <rect width="44" height="44" rx="10" fill="var(--accent)"/>
+        <rect x="10" y="12" width="24" height="3.5" rx="1.75" fill="#fff" opacity="0.45"/>
+        <rect x="10" y="20.25" width="17" height="3.5" rx="1.75" fill="#fff" opacity="0.7"/>
+        <rect x="10" y="28.5" width="9" height="3.5" rx="1.75" fill="#fff"/>
+        <circle cx="31" cy="30.25" r="3.2" fill="#fff"/>
+      </svg>
+      <div><strong>Multimodal News Summarizer</strong><small>Article · video · speech</small></div>
     </div>
 
     <nav aria-label="Input">
       <p class="label">Workspace</p>
       <button class="nav active" data-mode="samples" type="button">Sample stories</button>
       <button class="nav" data-mode="upload" type="button">Your own files</button>
+      <button class="nav" data-mode="explain" type="button">How it works</button>
     </nav>
 
-    <section class="facts">
-      <p class="label">The model</p>
-      <dl id="facts"></dl>
-      <p id="lead-fact" class="rail-note"></p>
+    <section class="flow" aria-label="What the summarizer does">
+      <p class="label">It reads</p>
+      <ul class="sources">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10l4 4v12H5z M8 11h8 M8 14.5h8 M8 18h5"/></svg><span>The article<small>every sentence</small></span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10.5l5-3v9l-5-3z"/></svg><span>The video<small>one frame a second</small></span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0 M12 17.5V21"/></svg><span>The speech<small>written out by Whisper</small></span></li>
+      </ul>
+      <p class="flow-arrow" aria-hidden="true">↓</p>
+      <p class="label">and hands you</p>
+      <ul class="gives">
+        <li>The few sentences that matter</li>
+        <li>The frames worth seeing</li>
+      </ul>
     </section>
 
-    <p class="rail-note foot">Extractive: it selects sentences from the article or the video's speech and never writes new ones. Check the output before using it.</p>
+    <p class="rail-note foot">It only picks sentences that are already there, so it can't invent facts. Everything runs in your browser: your files never leave this device.</p>
   </aside>
 
   <main>
     <header class="intro">
-      <p class="eyebrow">Article + video + transcript</p>
+      <p class="eyebrow">Article · video · speech</p>
       <h1>Long story. <em>Short summary.</em></h1>
       <p>A trained model reads a news article alongside its video, then picks the key sentences and key frames. It runs entirely in your browser.</p>
     </header>
@@ -48,15 +64,45 @@
 
     <section id="upload-panel" class="panel" hidden>
       <form id="form" class="upload-row">
-        <label class="drop"><span class="label">Article (PDF, optional)</span>
+        <label class="drop" data-empty="Drop a PDF here or click to choose">
           <input id="pdf" type="file" accept="application/pdf,.pdf">
+          <svg class="drop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10l4 4v12H5z M8 11h8 M8 14.5h8 M8 18h5"/></svg>
+          <span class="drop-title">Article <small>PDF · optional</small></span>
+          <span class="drop-file">Drop a PDF here or click to choose</span>
         </label>
-        <label class="drop"><span class="label">Video (MP4, optional)</span>
-          <input id="video" type="file" accept="video/mp4,.mp4">
+        <label class="drop" data-empty="Drop an MP4 or WebM here or click to choose">
+          <input id="video" type="file" accept="video/mp4,.mp4,video/webm,.webm">
+          <svg class="drop-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10.5l5-3v9l-5-3z"/></svg>
+          <span class="drop-title">Video <small>MP4 or WebM · optional</small></span>
+          <span class="drop-file">Drop an MP4 or WebM here or click to choose</span>
         </label>
         <button id="run" type="submit">Generate summary</button>
       </form>
       <p class="hint">Upload an article, a video, or both. Both gives the most complete result; a video alone is summarized from its speech and is the least reliable. Your files stay on this device. The first run downloads up to about 130 MB of models. Scanned PDFs won't work, and only the first 10 minutes of video are used.</p>
+    </section>
+
+    <section id="explain-panel" class="a-panel" hidden>
+      <div class="a-bar">
+        <label class="a-pick"><span class="label">Story (from the test set)</span><select id="a-story"></select></label>
+        <div class="a-controls">
+          <button id="a-prev" type="button" aria-label="Previous step">←</button>
+          <button id="a-play" type="button">▶ Play</button>
+          <button id="a-next" type="button" aria-label="Next step">→</button>
+        </div>
+      </div>
+      <nav id="a-dots" class="a-dots" aria-label="Steps"></nav>
+      <div class="a-caption-box" aria-live="polite">
+        <p id="a-concept" class="eyebrow"></p>
+        <p id="a-caption" class="a-caption"></p>
+        <p id="a-link" class="a-link"></p>
+      </div>
+      <div id="a-stage" class="a-stage"></div>
+    </section>
+
+    <section id="welcome" class="welcome" aria-label="How to use">
+      <div><b>1</b><h3>Pick a story</h3><p>Choose a sample from the test set, or upload your own article, video or both.</p></div>
+      <div><b>2</b><h3>The model reads it</h3><p>It scores every sentence using the text, the video frames and the speech, all in your browser.</p></div>
+      <div><b>3</b><h3>Compare the summaries</h3><p>See its picks next to the journalist's highlights, check the scores, and ask AI for a condensed version.</p></div>
     </section>
 
     <ol id="steps" class="steps" hidden></ol>
@@ -66,55 +112,93 @@
     <section id="results" hidden>
       <div class="result-head">
         <h2 id="result-title">Summary</h2>
-        <label id="length-control" class="length">Sentences <output id="length-value"></output>
+      </div>
+      <div class="result-bar">
+        <nav class="jump" aria-label="Jump to section">
+          <a href="#sec-summary" data-for="text-results">Summary</a>
+          <a href="#sec-scores" data-for="text-results">Scores</a>
+          <a href="#frames-block" data-for="frames-block">Key frames</a>
+          <a href="#speech-block" data-for="speech-block">What was said</a>
+          <a href="#sec-text">Full text</a>
+        </nav>
+        <label id="length-control" class="length">Summary length <output id="length-value"></output>
           <input id="length" type="range" min="1" max="8" step="1">
         </label>
       </div>
 
       <div id="text-results">
-      <div id="compare" class="compare">
-        <article class="column model">
-          <p class="label">Generated by the model</p>
-          <ol id="summary"></ol>
-          <p id="lead-note" class="hint"></p>
-        </article>
-        <article id="human-column" class="column human">
-          <p class="label">Written by a human</p>
-          <ul id="human"></ul>
-          <p class="hint">The highlights published with the article.</p>
-        </article>
+        <section id="sec-summary" class="block">
+          <div class="block-head"><h3>Summary</h3><div class="stat-row"><p id="inputs-used" class="chips inputs"></p><p id="summary-stats" class="chips"></p></div></div>
+          <div id="compare" class="compare">
+            <article class="column model">
+              <p class="label">Picked from the source by the model</p>
+              <ol id="summary"></ol>
+              <p id="lead-note" class="hint"></p>
+            </article>
+            <article id="human-column" class="column human">
+              <p class="label">Written by a journalist</p>
+              <ul id="human"></ul>
+              <p class="hint">The highlights published with the article.</p>
+            </article>
+          </div>
+
+          <div id="ai-block" class="ai-block">
+            <button id="ai-button" type="button" class="ai-button">✨ Write a condensed summary with AI</button>
+            <p id="ai-hint" class="hint"></p>
+            <article id="ai-column" class="column ai" hidden>
+              <p class="label">Written by AI · <span id="ai-model"></span></p>
+              <p id="ai-text" class="ai-text"></p>
+              <p id="ai-score" class="hint"></p>
+              <p class="hint">This is an abstractive summary: the AI wrote these sentences itself, so it can occasionally state something the source doesn't. The summary above uses only real sentences from the source.</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="rouge-block" class="block">
+          <div class="block-head"><h3>Agreement with the journalist</h3><p class="hint">ROUGE counts the words both summaries share. Higher is better.</p></div>
+          <table class="rouge">
+            <thead><tr><th scope="col">This story</th><th scope="col">ROUGE-1</th><th scope="col">ROUGE-2</th><th scope="col">ROUGE-L</th></tr></thead>
+            <tbody id="rouge"></tbody>
+          </table>
+          <p id="rouge-note" class="hint"></p>
+        </section>
+
+        <section id="sec-scores" class="block">
+          <div class="block-head"><h3>Sentence scores</h3><p id="sentence-hint" class="hint"></p></div>
+          <p class="strip-legend"><span><i class="in"></i>In the summary</span><span><i></i>Not picked</span></p>
+          <div id="sentence-strip" class="strip"></div>
+          <div class="strip-axis"><span>Sentence 1</span><span id="strip-end"></span></div>
+          <p id="sentence-readout" class="readout">Hover over a bar to read the sentence.</p>
+        </section>
       </div>
 
-      <div id="rouge-block">
-        <h3>Agreement with the human summary</h3>
-        <table class="rouge">
-          <thead><tr><th scope="col">ROUGE F1, this story</th><th scope="col">1</th><th scope="col">2</th><th scope="col">L</th></tr></thead>
-          <tbody id="rouge"></tbody>
-        </table>
-      </div>
-
-      <h3>Sentence scores</h3>
-      <p id="sentence-hint" class="hint"></p>
-      <div id="sentence-strip" class="strip"></div>
-      <p id="sentence-readout" class="readout">Hover over a bar to read the sentence.</p>
-      </div>
-
-      <div id="frames-block">
-        <h3>Key frames</h3>
+      <section id="frames-block" class="block">
+        <div class="block-head"><h3>Key frames</h3><p class="hint">The moments of the video the model rates most important.</p></div>
         <div id="frames" class="frames"></div>
-      </div>
+      </section>
 
-      <details>
-        <summary id="full-text-title">Full article, with selected sentences marked</summary>
-        <div id="article" class="article"></div>
-      </details>
-      <details id="transcript-block">
-        <summary>Video transcript</summary>
-        <p id="transcript"></p>
-      </details>
+      <section id="speech-block" class="block">
+        <div class="block-head"><h3>What was said</h3><p id="speech-hint" class="hint"></p></div>
+        <div class="speech-wrap">
+          <ol id="speech-list" class="speech-list"></ol>
+          <figure id="speech-preview" class="speech-preview" hidden><img alt=""><figcaption></figcaption></figure>
+        </div>
+      </section>
+
+      <section id="sec-text" class="block">
+        <details>
+          <summary id="full-text-title">Full article, with selected sentences marked</summary>
+          <div id="article" class="article"></div>
+        </details>
+        <details id="transcript-block">
+          <summary>Video transcript</summary>
+          <p id="transcript"></p>
+        </details>
+      </section>
     </section>
   </main>
   <video id="player" muted playsinline preload="auto" hidden></video>
   <script type="module" src="main.js"></script>
+  <script type="module" src="explainer.js"></script>
 </body>
 </html>

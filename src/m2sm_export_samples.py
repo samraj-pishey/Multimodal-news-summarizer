@@ -3,7 +3,7 @@
 Stories come from the Daily Mail test split at random with a fixed seed, before any output is seen. The browser
 runs the model on them live, using the stored frame features; ROUGE and thumbnails are saved here.
 
-Usage: python src/m2sm_export_samples.py --run m2sm_full_lr0.01 [--skip 5099]
+Usage: python src/m2sm_export_samples.py --run m2sm_full_lr0.01 [--skip 5099 4202]
 """
 import argparse
 import json
