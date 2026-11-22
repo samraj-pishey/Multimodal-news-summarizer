@@ -1,0 +1,77 @@
+2257 story folders | device mps
+  failed dailymail/4016: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4016/video.mp4'
+  failed dailymail/4031: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4031/video.mp4'
+  failed dailymail/4033: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4033/video.mp4'
+  53/2257 (50 new, 3 failed), 1.6 min
+  failed dailymail/4054: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4054/video.mp4'
+  104/2257 (100 new, 4 failed), 3.6 min
+  154/2257 (150 new, 4 failed), 5.6 min
+  204/2257 (200 new, 4 failed), 7.6 min
+  254/2257 (250 new, 4 failed), 9.4 min
+  failed dailymail/4299: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4299/video.mp4'
+  failed dailymail/4300: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4300/video.mp4'
+  failed dailymail/4301: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4301/video.mp4'
+  failed dailymail/4302: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4302/video.mp4'
+  308/2257 (300 new, 8 failed), 11.6 min
+  358/2257 (350 new, 8 failed), 13.6 min
+  408/2257 (400 new, 8 failed), 16.1 min
+  458/2257 (450 new, 8 failed), 19.0 min
+  failed dailymail/4478: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4478/video.mp4'
+  509/2257 (500 new, 9 failed), 22.1 min
+  559/2257 (550 new, 9 failed), 25.0 min
+  failed dailymail/4576: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4576/video.mp4'
+  failed dailymail/4600: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4600/video.mp4'
+  611/2257 (600 new, 11 failed), 27.7 min
+  failed dailymail/4623: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4623/video.mp4'
+  662/2257 (650 new, 12 failed), 30.7 min
+  failed dailymail/4699: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4699/video.mp4'
+  713/2257 (700 new, 13 failed), 33.0 min
+  763/2257 (750 new, 13 failed), 35.7 min
+  failed dailymail/4778: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4778/video.mp4'
+  814/2257 (800 new, 14 failed), 38.0 min
+  864/2257 (850 new, 14 failed), 41.2 min
+  914/2257 (900 new, 14 failed), 43.2 min
+  964/2257 (950 new, 14 failed), 45.5 min
+  1014/2257 (1000 new, 14 failed), 48.2 min
+  1064/2257 (1050 new, 14 failed), 123.7 min
+  failed dailymail/5101: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5101/video.mp4'
+  failed dailymail/5103: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5103/video.mp4'
+  1116/2257 (1100 new, 16 failed), 204.4 min
+  1166/2257 (1150 new, 16 failed), 243.7 min
+  1216/2257 (1200 new, 16 failed), 245.3 min
+  1266/2257 (1250 new, 16 failed), 247.2 min
+  failed dailymail/5267: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5267/video.mp4'
+  failed dailymail/5308: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5308/video.mp4'
+  failed dailymail/5311: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5311/video.mp4'
+  1319/2257 (1300 new, 19 failed), 249.2 min
+  1369/2257 (1350 new, 19 failed), 250.8 min
+  failed dailymail/5374: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5374/video.mp4'
+  1420/2257 (1400 new, 20 failed), 252.6 min
+  1470/2257 (1450 new, 20 failed), 254.1 min
+  1520/2257 (1500 new, 20 failed), 255.8 min
+  1570/2257 (1550 new, 20 failed), 257.5 min
+  failed dailymail/5612: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5612/video.mp4'
+  1621/2257 (1600 new, 21 failed), 259.1 min
+  1671/2257 (1650 new, 21 failed), 260.8 min
+  1721/2257 (1700 new, 21 failed), 262.7 min
+  1771/2257 (1750 new, 21 failed), 264.7 min
+  1821/2257 (1800 new, 21 failed), 266.5 min
+  failed dailymail/5835: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5835/video.mp4'
+  1872/2257 (1850 new, 22 failed), 268.5 min
+  failed dailymail/5912: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5912/video.mp4'
+  failed dailymail/5914: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5914/video.mp4'
+  failed dailymail/5915: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5915/video.mp4'
+  failed dailymail/5917: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5917/video.mp4'
+  1926/2257 (1900 new, 26 failed), 269.7 min
+  failed dailymail/5961: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5961/video.mp4'
+  failed dailymail/5965: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5965/video.mp4'
+  1978/2257 (1950 new, 28 failed), 271.5 min
+  failed dailymail/5981: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5981/video.mp4'
+  failed dailymail/5998: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/5998/video.mp4'
+  2030/2257 (2000 new, 30 failed), 273.1 min
+  failed cnn/66: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/cnn_data/66/video/segment1.ts'
+  2081/2257 (2050 new, 31 failed), 274.2 min
+  2131/2257 (2100 new, 31 failed), 275.6 min
+  2181/2257 (2150 new, 31 failed), 277.1 min
+  2231/2257 (2200 new, 31 failed), 279.2 min
+Finished: 2226 new, 31 failed, 280.1 min

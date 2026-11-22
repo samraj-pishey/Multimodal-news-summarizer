@@ -1,4 +1,5 @@
 from pathlib import Path
+import csv
 import json
 import time
 
@@ -9,12 +10,12 @@ import soxr
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_ROOT = PROJECT_ROOT / "data" / "data"
-CLEAN_DIR = PROJECT_ROOT / "outputs" / "full_run_v3"
+SPLITS_PATH = PROJECT_ROOT / "outputs" / "splits.csv"
 OUT_PATH = PROJECT_ROOT / "outputs" / "audio" / "whisper_transcripts.jsonl"
 
 MODEL_NAME = "mlx-community/whisper-large-v3-turbo"
 SAMPLE_RATE = 16000
-# BART only has room for ~100 transcript words next to the article, so later audio is never used.
+# Only the first 90 s of each video are transcribed.
 MAX_SECONDS = 90
 
 
@@ -27,10 +28,10 @@ def load_audio(path):
 
 def pending_stories(done):
     # Test first, so partial runs are already usable for evaluation.
+    rows = list(csv.DictReader(open(SPLITS_PATH)))
     for split in ("test", "val", "train"):
-        for line in open(CLEAN_DIR / f"clean_{split}.jsonl"):
-            row = json.loads(line)
-            if row["source"] != "dailymail" or row["id"] in done:
+        for row in rows:
+            if row["split"] != split or row["source"] != "dailymail" or row["id"] in done:
                 continue
             path = DATA_ROOT / "daily mail" / row["id"].split("/")[1] / "audio.mp3"
             if path.exists():

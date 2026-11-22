@@ -1,0 +1,6 @@
+2257 story folders | device mps
+  failed dailymail/4016: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4016/video.mp4'
+  failed dailymail/4031: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4031/video.mp4'
+  failed dailymail/4033: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4033/video.mp4'
+  53/2257 (50 new, 3 failed), 7.9 min
+  failed dailymail/4054: [Errno 1094995529] Invalid data found when processing input: '/Users/samrajpishey/Multimodal-news-summarizer/data/data/daily mail/4054/video.mp4'

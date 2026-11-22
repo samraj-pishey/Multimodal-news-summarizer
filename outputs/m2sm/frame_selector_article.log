@@ -1,0 +1,25 @@
+train 1208, val 172, seed 42
+  lr 0.001 epoch 1: loss 0.6126 val cos 69.14 gap 10 * (13s)
+  lr 0.001 epoch 2: loss 0.5995 val cos 68.93 gap 10 (13s)
+  lr 0.001 epoch 3: loss 0.5924 val cos 69.35 gap 10 * (12s)
+  lr 0.001 epoch 4: loss 0.5990 val cos 69.28 gap 10 (13s)
+  lr 0.001 epoch 5: loss 0.5884 val cos 69.23 gap 10 (13s)
+  lr 0.001 epoch 6: loss 0.5845 val cos 69.31 gap 10 (13s)
+  lr 0.001 epoch 7: loss 0.5812 val cos 69.44 gap 10 * (13s)
+  lr 0.001 epoch 8: loss 0.5834 val cos 69.47 gap 10 * (13s)
+  lr 0.001 epoch 9: loss 0.5785 val cos 69.54 gap 10 * (13s)
+  lr 0.001 epoch 10: loss 0.5759 val cos 69.32 gap 10 (13s)
+  lr 0.001 epoch 11: loss 0.5760 val cos 69.29 gap 10 (13s)
+  lr 0.001 epoch 12: loss 0.5739 val cos 69.14 gap 10 (13s)
+  lr 0.001 epoch 13: loss 0.5713 val cos 69.22 gap 10 (13s)
+  lr 0.001 epoch 14: loss 0.5711 val cos 69.34 gap 10 (13s)
+  lr 0.0001 epoch 1: loss 0.6138 val cos 69.58 gap 10 * (13s)
+  lr 0.0001 epoch 2: loss 0.5813 val cos 69.34 gap 10 (13s)
+  lr 0.0001 epoch 3: loss 0.5758 val cos 69.43 gap 10 (13s)
+  lr 0.0001 epoch 4: loss 0.5728 val cos 69.12 gap 10 (12s)
+  lr 0.0001 epoch 5: loss 0.5702 val cos 69.41 gap 10 (13s)
+  lr 0.0001 epoch 6: loss 0.5673 val cos 69.34 gap 5 (12s)
+Chosen on validation: lr 0.0001, epoch 1, gap 10, cos 69.58
+Validation: {"Selector": 69.58165984860686, "VSUMM": 70.52034382210222, "Uniform": 68.60432526053384, "Random": 68.58100345358253}
+Test: {"Selector": {"n": 352, "cos": 69.80645692145282}, "VSUMM": {"n": 352, "cos": 70.46466789801012}, "Uniform": {"n": 352, "cos": 69.67818301848389}, "Random": {"n": 352, "cos": 68.66656979545951}}
+Selector minus: {"VSUMM": {"difference": -0.6582109765572981, "low": -1.1360709690912203, "high": -0.20356998482549737}, "Uniform": {"difference": 0.12827390296892685, "low": -0.3221795595759018, "high": 0.5663182992826807}, "Random": {"difference": 1.1398871259933168, "low": 0.7708282795925202, "high": 1.5074626055218021}}

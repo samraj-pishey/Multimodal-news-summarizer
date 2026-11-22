@@ -1,0 +1,29 @@
+=== video_early Wed Nov  4 11:47:47 IST 2026
+video_early: train 1359, val 194, 3,269,653 parameters
+  epoch 1: loss 0.4799 val R1/R2/RL 41.02/18.38/31.16 k=4 * (107s)
+  epoch 2: loss 0.4522 val R1/R2/RL 41.08/18.38/31.21 k=4 * (110s)
+  epoch 3: loss 0.4303 val R1/R2/RL 41.08/18.38/31.21 k=4 (110s)
+  epoch 4: loss 0.4101 val R1/R2/RL 41.08/18.38/31.21 k=4 (109s)
+  epoch 5: loss 0.3932 val R1/R2/RL 41.08/18.38/31.21 k=4 (117s)
+  epoch 6: loss 0.3804 val R1/R2/RL 41.08/18.38/31.21 k=4 (113s)
+  epoch 7: loss 0.3714 val R1/R2/RL 41.08/18.38/31.21 k=4 (114s)
+{"best_epoch": 2, "test_dailymail": {"n": 387, "r1": 39.83912473870175, "r2": 17.731870919402947, "rl": 30.698002820944943}, "test_cnn": {"n": 204, "r1": 23.85884733943714, "r2": 9.015101570213899, "rl": 18.749570731909007}}
+=== video_transcript_early Wed Nov  4 12:00:56 IST 2026
+video_transcript_early: train 1359, val 194, 3,420,949 parameters
+  epoch 1: loss 0.4792 val R1/R2/RL 41.11/18.39/31.23 k=4 * (132s)
+  epoch 2: loss 0.4401 val R1/R2/RL 41.08/18.38/31.21 k=4 (133s)
+  epoch 3: loss 0.4167 val R1/R2/RL 41.08/18.38/31.21 k=4 (134s)
+  epoch 4: loss 0.3976 val R1/R2/RL 41.08/18.38/31.21 k=4 (133s)
+  epoch 5: loss 0.3831 val R1/R2/RL 41.08/18.38/31.21 k=4 (132s)
+  epoch 6: loss 0.3732 val R1/R2/RL 41.08/18.38/31.21 k=4 (131s)
+{"best_epoch": 1, "test_dailymail": {"n": 387, "r1": 39.86193707358901, "r2": 17.733764894767408, "rl": 30.718796408980296}, "test_cnn": {"n": 204, "r1": 23.91847575215991, "r2": 9.076558183122474, "rl": 18.79903091382831}}
+=== m2sm_full Wed Nov  4 12:14:25 IST 2026
+m2sm_full: train 1359, val 194, 3,537,690 parameters
+  epoch 1: loss 0.6575 val R1/R2/RL 38.92/15.73/28.54 k=3 * (167s)
+  epoch 2: loss 0.6188 val R1/R2/RL 37.74/15.01/28.09 k=4 (158s)
+  epoch 3: loss 0.5998 val R1/R2/RL 37.79/14.97/28.16 k=4 (159s)
+  epoch 4: loss 0.5864 val R1/R2/RL 38.01/15.26/28.31 k=4 (158s)
+  epoch 5: loss 0.5759 val R1/R2/RL 38.27/15.53/28.53 k=4 (158s)
+  epoch 6: loss 0.5673 val R1/R2/RL 38.56/15.75/28.75 k=4 (159s)
+{"best_epoch": 1, "test_dailymail": {"n": 387, "r1": 38.53729850272249, "r2": 15.952393092298351, "rl": 28.576302841064027}, "test_cnn": {"n": 204, "r1": 25.988327177014074, "r2": 9.206652440917587, "rl": 19.818236987150538}, "test_cos": {"n": 352, "cos": 68.02987929602916}}
+Queue finished Wed Nov  4 12:30:44 IST 2026

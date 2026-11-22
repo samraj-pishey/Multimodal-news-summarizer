@@ -1,0 +1,34 @@
+W1111 09:35:03.905000 17194 torch/distributed/elastic/multiprocessing/redirects.py:35] NOTE: Redirects are currently not supported in MacOs.
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 8250.24it/s]
+[transformers] [1mRobertaModel LOAD REPORT[0m from: FacebookAI/roberta-base
+Key                       | Status     | 
+--------------------------+------------+-
+lm_head.layer_norm.weight | UNEXPECTED | 
+lm_head.dense.weight      | UNEXPECTED | 
+lm_head.bias              | UNEXPECTED | 
+lm_head.layer_norm.bias   | UNEXPECTED | 
+lm_head.dense.bias        | UNEXPECTED | 
+pooler.dense.bias         | MISSING    | 
+pooler.dense.weight       | MISSING    | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+2144 articles (65,525 sentences), 1207 speech stories (13,514 sentences)
+  article: 230 of 2144 stories, 62 sentences/s
+  article: 430 of 2144 stories, 62 sentences/s
+  article: 630 of 2144 stories, 62 sentences/s
+  article: 830 of 2144 stories, 62 sentences/s
+  article: 1030 of 2144 stories, 62 sentences/s
+  article: 1230 of 2144 stories, 63 sentences/s
+  article: 1430 of 2144 stories, 63 sentences/s
+  article: 1630 of 2144 stories, 63 sentences/s
+  article: 1830 of 2144 stories, 63 sentences/s
+  article: 2030 of 2144 stories, 62 sentences/s
+  article: 2144 of 2144 stories, 60 sentences/s
+  speech: 230 of 1207 stories, 68 sentences/s
+  speech: 430 of 1207 stories, 66 sentences/s
+  speech: 630 of 1207 stories, 68 sentences/s
+  speech: 830 of 1207 stories, 68 sentences/s
+  speech: 1030 of 1207 stories, 68 sentences/s
+  speech: 1207 of 1207 stories, 68 sentences/s

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Multimodal News Summarizer Presentation</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="deck.css">
+</head>
+<body>
+<main class="deck">
+
+<!-- 1 -->
+<section class="slide">
+  <p class="kicker">NLP project · November 2026</p>
+  <h1>Multimodal NLP Framework<br>for Automated Summary Generation<br>from <em>Heterogeneous Sources</em></h1>
+  <p class="lead">Reading a news article, its video and its speech together, then keeping only what matters.</p>
+  <div class="team f">
+    <div><b>S Samraj Pishey</b><span class="mono">USN: 1RUA24CSE0385</span></div>
+    <div><b>S A Shashwath</b><span class="mono">USN: 1RUA24CSE0382</span></div>
+    <div><b>Rohan Olekar S G</b><span class="mono">USN: 1RUA24CSE0372</span></div>
+    <div><b>Ranjith Kumar P S</b><span class="mono">USN: 1RUA24CSE0360</span></div>
+  </div>
+  <p class="f small">School of Computer Science and Engineering · RV University, Bengaluru &nbsp;·&nbsp; Demo app: <span class="mono">Multimodal News Summarizer</span></p>
+  <aside data-notes><h4>The big idea</h4><p>This is the opening. In one breath you tell the jury what the project does: it reads a news article, the video that comes with it, and what people say in that video, and it produces a short summary plus a few key pictures.</p><h4>Words to know</h4><ul><li><b>Multimodal</b>: using more than one type of input. Here: text, images (video frames) and audio (speech).</li><li><b>Summarization</b>: making a long text short while keeping the important points.</li><li><b>Heterogeneous sources</b>: sources of different kinds: an article, a video and speech are very different types of data.</li><li><b>NLP (Natural Language Processing)</b>: the field of teaching computers to work with human language.</li><li><b>Framework</b>: a complete pipeline of connected parts (data preparation, models, evaluation and an app), not a single model.</li><li><b>Automated summary generation</b>: the computer produces the summary by itself, either by picking sentences (extractive) or by writing new ones (abstractive).</li></ul><h4>What to say</h4><p class="say">Good morning. We are Samraj, Shashwath, Rohan and Ranjith, from the School of Computer Science and Engineering at RV University. Our project is a Multimodal NLP Framework for Automated Summary Generation from Heterogeneous Sources. News today comes as text, video and speech together, and nobody has time to read and watch everything. We built and tested models that read all three and produce a short summary, and we turned it into a web app, the Multimodal News Summarizer.</p><h4>If the jury asks</h4><ul><li><b>Why this topic?</b> News websites publish articles with videos every day. A tool that condenses both saves readers time, and it is a well-known research problem with a public dataset.</li><li><b>Why call it a framework?</b> It covers the whole pipeline: cleaning the data, several models (M2SM, our hybrid, BART), fair evaluation, and a working app.</li></ul></aside>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <p class="kicker">The problem</p>
+  <h2>News comes in three forms, and nobody has time for all of them</h2>
+  <div class="row">
+    <div class="card f"><h3>Article</h3><p>Hundreds of words, written by a journalist.</p></div>
+    <div class="card f"><h3>Video</h3><p>Minutes of footage. Which frames actually matter?</p></div>
+    <div class="card f"><h3>Speech</h3><p>What people say on camera: often new information.</p></div>
+    <div class="card ours f"><h3>Our goal</h3><p>A short summary of 3 to 5 sentences, plus the few key frames.</p></div>
+  </div>
+  <aside data-notes><h4>The big idea</h4><p>We explain the problem. Every news story in our data has three parts: the article, the video and the speech. Our goal is the same as a newspaper's highlights box: 3 to 5 sentences and a picture or two.</p><h4>Words to know</h4><ul><li><b>Article</b>: the written news story, usually 20 to 100 sentences.</li><li><b>Video frame</b>: a single picture from a video. A video is just many pictures shown quickly; we take one per second.</li><li><b>Speech</b>: what people say in the video. We turn it into text with a speech-to-text model.</li></ul><h4>What to say</h4><p class="say">News comes in three forms. The article has hundreds of words, the video has minutes of footage, and the people on camera often say things that are not in the article. Our goal: a short summary of 3 to 5 sentences plus the few frames worth seeing.</p><h4>If the jury asks</h4><ul><li><b>Why not just summarize the article?</b> That is our main baseline, and it is very strong. Part of our research question is whether adding video and speech helps. Our honest answer, later in the talk, is that on this data it mostly doesn't.</li><li><b>Why one frame per second?</b> Neighbouring frames are almost identical. One per second keeps the information while making the computation small enough for a laptop.</li></ul></aside>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <p class="kicker">Two ways to summarize</p>
+  <h2>Pick sentences, or write new ones</h2>
+  <div class="cols-2">
+    <div class="card f"><span class="tag">Extractive</span><h3>Highlight the best sentences</h3>
+      <p>Like using a highlighter pen. Every sentence comes from the article, so it can't invent facts. M2SM, A2Summ and our hybrid all work this way.</p></div>
+    <div class="card f"><span class="tag">Abstractive</span><h3>Write a new, shorter text</h3>
+      <p>Like a journalist writing highlights. Reads naturally, but may state things the article never said. We added this with BART.</p></div>
+  </div>
+  <p class="f small" style="margin-top:20px">Both are compared with the journalist's own highlights using ROUGE (explained later).</p>
+  <aside data-notes><h4>The big idea</h4><p>There are two ways to summarize. Extractive picks existing sentences, like a highlighter. Abstractive writes new sentences, like a person writing notes. Most of our work is extractive, because both research papers we follow are extractive. At the end we added an abstractive model (BART) for comparison.</p><h4>Words to know</h4><ul><li><b>Extractive summarization</b>: choosing whole sentences from the original text. Safe: it can't invent facts, because every sentence is real.</li><li><b>Abstractive summarization</b>: generating new sentences. Reads naturally, but can 'hallucinate', meaning it can state things the source never said.</li><li><b>ROUGE</b>: the standard score for summaries. It counts how many words our summary shares with a human-written summary. Explained on slide 16.</li></ul><h4>What to say</h4><p class="say">There are two ways to summarize. Extractive is like a highlighter pen: we pick the best sentences that already exist, so nothing can be invented. Abstractive is like writing your own notes: more natural, but it can make mistakes. Most of our project is extractive, and we added an abstractive model at the end to compare.</p><h4>If the jury asks</h4><ul><li><b>Which is better?</b> It depends. Extractive is safer and easier to check. Abstractive is shorter and more readable. In our app we show both, side by side.</li><li><b>What is hallucination?</b> When a model writes something that sounds right but isn't in the source. Extractive methods can't hallucinate because they only copy real sentences.</li></ul></aside>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <p class="kicker">The data</p>
+  <h2>MM-AVS: Daily Mail and CNN news stories</h2>
+  <div class="sizes f">
+    <div><b>2,257</b><span>story folders downloaded<br>(2,000 Daily Mail · 257 CNN)</span></div>
+    <div><b>≈ 27 GB</b><span>on disk, mostly video</span></div>
+    <div><b>2,144</b><span>stories kept after cleaning</span></div>
+    <div><b>79,039</b><span>sentences (article + speech)</span></div>
+  </div>
+  <div class="cols-2">
+    <div>
+      <p class="f">Each story contains:</p>
+      <p class="f"><span class="tag">article sentences</span><span class="tag">journalist's highlights</span><span class="tag">photos</span><span class="tag">video</span><span class="tag">audio</span><span class="tag">transcript</span></p>
+      <p class="f small">Video: 1 frame per second, each turned into 2,048 numbers by ResNet-50.<br>Speech: written out by Whisper, with a time for every sentence.</p>
+    </div>
+    <table class="t f">
+      <thead><tr><th>Split</th><th>Stories</th><th>Used for</th></tr></thead>
+      <tbody>
+        <tr><td>Train</td><td>1,359</td><td>learning</td></tr>
+        <tr><td>Validation</td><td>194</td><td>all choices</td></tr>
+        <tr><td>Test (Daily Mail)</td><td>387</td><td>final score, once</td></tr>
+        <tr><td>Test (CNN)</td><td>204</td><td>extra check</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <aside data-notes><h4>The big idea</h4><p>We introduce the dataset. MM-AVS was built by the same authors as M2SM, and A2Summ also used it, so we can compare with both papers. We downloaded 2,257 story folders (about 27 GB, mostly video) and kept 2,144 after cleaning. The table shows how the stories are split into training, validation and test.</p><h4>Words to know</h4><ul><li><b>Dataset</b>: a collection of examples a model learns from and is tested on.</li><li><b>Highlights</b>: the short summary a journalist wrote for each article. We treat it as the correct answer.</li><li><b>Training set</b>: examples the model learns from (1,359 stories).</li><li><b>Validation set</b>: examples used to make choices, like which version of the model to keep (194 stories). Like mock exams.</li><li><b>Test set</b>: examples used once, at the very end, to measure the final score (387 Daily Mail + 204 CNN). Like the real exam.</li><li><b>ResNet-50</b>: a well-known image network, already trained on millions of photos, that turns a picture into 2,048 numbers.</li><li><b>Whisper</b>: a speech-to-text model from OpenAI.</li></ul><h4>What to say</h4><p class="say">Our data is MM-AVS, a public research dataset of Daily Mail and CNN stories. Each story has the article, the journalist's highlights, photos, the video, its audio and a transcript. We downloaded about 27 gigabytes and kept 2,144 stories after cleaning. We learn on 1,359, make every choice on 194 validation stories, and use 387 test stories only once at the end.</p><h4>If the jury asks</h4><ul><li><b>Why use the test set only once?</b> If you look at the test set while making choices, you slowly tune to it, and the final score stops being honest. It's like peeking at the exam paper.</li><li><b>Why is CNN test only?</b> That's what the original paper did: CNN has few stories, so it is used as an extra check, not for training.</li><li><b>Is the dataset public?</b> Yes. The link is on the next slide.</li></ul></aside>
+</section>
+
+<!-- 4b: preprocessing -->
+<section class="slide">
+  <p class="kicker">Preparing the data</p>
+  <h2 class="tight">Nine preprocessing steps, from raw files to model inputs</h2>
+  <ol class="prep">
+    <li class="f"><b>1 · Collect</b><span>2,257 Daily Mail and CNN story folders (≈ 27 GB) downloaded from MM-AVS</span></li>
+    <li class="f"><b>2 · Remove broken stories</b><span>33 with no article or highlights, 80 with empty or corrupt video → <em>2,144 kept</em></span></li>
+    <li class="f"><b>3 · Find near-duplicates</b><span>Compare 8-word phrases between articles; Jaccard overlap above 0.3 = same story → <em>892 duplicate pairs</em>, 1,935 unique stories</span></li>
+    <li class="f"><b>4 · Split without leaks</b><span>Official 387 Daily Mail test stories; rest 7 : 1 train / validation; CNN test only. A duplicate-free split checks for leakage</span></li>
+    <li class="f"><b>5 · Clean the text</b><span>Lower-case tokens; at most 100 sentences × 60 words; vocabulary of 19,531 words seen twice in training</span></li>
+    <li class="f"><b>6 · Label key sentences</b><span>Authors' labels for Daily Mail; best-ROUGE (greedy) labels for CNN</span></li>
+    <li class="f"><b>7 · Video → numbers</b><span>1 frame per second → ResNet-50 (2,048 numbers); key frame = the frame closest to each published photo</span></li>
+    <li class="f"><b>8 · Speech → sentences</b><span>Whisper transcripts with timestamps; drop low-confidence speech; keep sentences of 3+ words → <em>1,207 stories</em></span></li>
+    <li class="f"><b>9 · Sentences → numbers</b><span>RoBERTa turns each article and speech sentence into 768 numbers (79,039 sentences)</span></li>
+  </ol>
+  <p class="f small prep-link">Dataset: Fu, Wang &amp; Yang, <i>MM-AVS</i>, NAACL 2021 · Download: <a href="https://github.com/xiyan-fu/MM-AVS" target="_blank" rel="noopener">github.com/xiyan-fu/MM-AVS</a></p>
+  <aside data-notes><h4>The big idea</h4><p>This slide lists the nine steps that turn raw files into something a model can use. The most important ones: removing broken stories, finding near-duplicate articles, splitting fairly, and turning text, frames and speech into numbers.</p><h4>Words to know</h4><ul><li><b>Preprocessing</b>: cleaning and preparing data before training.</li><li><b>Near-duplicate</b>: two articles that are almost the same story, for example the same article published twice with small edits.</li><li><b>8-word phrases (shingles)</b>: we cut each article into overlapping pieces of 8 words, so two articles can be compared piece by piece.</li><li><b>Jaccard similarity</b>: shared pieces divided by all pieces. If two articles share more than 30% of their 8-word phrases, we treat them as the same story.</li><li><b>Data leakage</b>: when test stories (or copies of them) sneak into training. It makes scores look better than they really are.</li><li><b>Vocabulary</b>: the list of words the model knows. Ours has 19,531 words that appear at least twice in training and have a GloVe vector.</li><li><b>Greedy ROUGE labels</b>: for CNN, which has no official labels, we pick sentences one at a time, each time adding the one that raises ROUGE the most.</li></ul><h4>What to say</h4><p class="say">Before training, we prepared the data in nine steps. We removed 33 stories with no text and 80 with empty or broken videos, leaving 2,144. We searched for near-duplicate articles by comparing 8-word phrases and found 892 duplicate pairs. We split the data using the official test list, cleaned the text, labelled the key sentences, turned frames into numbers with ResNet-50, turned speech into timed sentences with Whisper, and turned every sentence into numbers with RoBERTa.</p><h4>If the jury asks</h4><ul><li><b>Why remove duplicates?</b> If the same story is in both training and test, the model has effectively seen the answer. We built a duplicate-free split to check for this. Our main results use the official split so they can be compared with the published papers.</li><li><b>What happens to speech with no words?</b> Whisper sometimes invents words over music or silence. We drop low-confidence speech, and keep a story's speech only if at least 5 real words remain (1,207 stories).</li><li><b>Where can I download the data?</b> github.com/xiyan-fu/MM-AVS, the official page. It links to the authors' OneDrive.</li></ul></aside>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <p class="kicker">Our journey</p>
+  <h2>Four stages</h2>
+  <div class="row">
+    <div class="card m2sm f"><span class="tag gold">1</span><h3>Rebuild M2SM</h3><p>Fu et al., 2020: the paper that introduced this dataset.</p></div>
+    <div class="card a2 f"><span class="tag teal">2</span><h3>Study A2Summ</h3><p>He et al., CVPR 2023: a newer transformer model.</p></div>
+    <div class="card ours f"><span class="tag ours">3</span><h3>Build our hybrid</h3><p>Best ideas from both, plus our own speech-alignment idea.</p></div>
+    <div class="card ours f"><span class="tag ours">4</span><h3>Test honestly &amp; demo</h3><p>Baselines, ablations, significance tests, and the Multimodal News Summarizer web app.</p></div>
+  </div>
+  <div class="legend f"><span><i style="background:var(--gold)"></i>From M2SM</span><span><i style="background:var(--teal)"></i>From A2Summ</span><span><i style="background:var(--accent)"></i>Our work</span></div>
+  <aside data-notes><h4>The big idea</h4><p>A roadmap of the project in four stages, and the colour code used on every diagram from now on: violet for M2SM, green for A2Summ, orange for our own work.</p><h4>Words to know</h4><ul><li><b>Replication</b>: rebuilding a published method yourself to check its results. Normal, respected research practice.</li><li><b>Hybrid</b>: a model that combines ideas from more than one source.</li></ul><h4>What to say</h4><p class="say">Our project had four stages. First we rebuilt M2SM, the paper that introduced this dataset. Then we studied a newer paper, A2Summ. Then we combined ideas from both into our own hybrid model, and added our own idea about speech timestamps. Finally we tested everything carefully and built a demo app. Remember the colours: violet is M2SM, green is A2Summ, orange is ours.</p><h4>If the jury asks</h4><ul><li><b>Isn't rebuilding a paper copying?</b> No. Replication means implementing a method from its description and testing whether its claims hold. We cite the paper, and we keep their numbers and ours separate.</li></ul></aside>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <p class="kicker gold">Research paper 1 · M2SM (Fu et al., 2020)</p>
+  <h2>How M2SM reads an article and its video</h2>
+  <svg class="diagram" viewBox="0 0 1000 420" role="img" aria-label="M2SM architecture">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9fb0b3"/></marker>
+      <marker id="arrow-hot" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#d95926"/></marker>
+    </defs>
+    <g class="f">
+      <rect class="box input" x="0" y="40" width="138" height="56"/><text x="69" y="66" text-anchor="middle">Article words</text><text class="sub" x="69" y="84" text-anchor="middle">GloVe · 100 each</text>
+      <rect class="box input" x="0" y="182" width="138" height="56"/><text x="69" y="208" text-anchor="middle">Transcript words</text><text class="sub" x="69" y="226" text-anchor="middle">what is said</text>
+      <rect class="box input" x="0" y="324" width="138" height="56"/><text x="69" y="350" text-anchor="middle">Video frames</text><text class="sub" x="69" y="368" text-anchor="middle">ResNet-50 · 2048 each</text>
+    </g>
+    <g class="f">
+      <rect class="box gold" x="170" y="20" width="142" height="96"/><text x="241" y="50" text-anchor="middle">Word BiLSTM</text><text class="sub" x="241" y="70" text-anchor="middle">→ sentence vectors</text><text x="241" y="98" text-anchor="middle">Sentence BiLSTM</text>
+      <rect class="box gold" x="170" y="182" width="142" height="56"/><text x="241" y="215" text-anchor="middle">Transcript BiLSTM</text>
+      <rect class="box gold" x="170" y="324" width="142" height="56"/><text x="241" y="357" text-anchor="middle">Frame BiLSTM</text>
+      <path class="wire" d="M138,68 H168"/><path class="wire" d="M138,210 H168"/><path class="wire" d="M138,352 H168"/>
+    </g>
+    <g class="f">
+      <rect class="box gold" x="345" y="130" width="172" height="160"/><text x="431" y="166" text-anchor="middle">Bi-hop attention</text>
+      <text class="sub" x="431" y="190" text-anchor="middle">sentence → transcript → frame</text><text class="sub" x="431" y="208" text-anchor="middle">(transcript is the bridge)</text>
+      <text x="431" y="246" text-anchor="middle">Bilinear attention</text><text class="sub" x="431" y="266" text-anchor="middle">scores every pair</text>
+      <path class="wire" d="M312,68 C335,68 330,160 343,160"/><path class="wire" d="M312,210 H343"/><path class="wire" d="M312,352 C335,352 330,260 343,260"/>
+    </g>
+    <g class="f">
+      <rect class="box gold" x="550" y="62" width="150" height="66"/><text x="625" y="90" text-anchor="middle">Late+ fusion</text><text class="sub" x="625" y="110" text-anchor="middle">text vs. video context</text>
+      <rect class="box gold" x="550" y="292" width="150" height="66"/><text x="625" y="320" text-anchor="middle">Frame scorer</text><text class="sub" x="625" y="340" text-anchor="middle">scores every second</text>
+      <path class="wire" d="M517,180 C535,180 530,95 548,95"/><path class="wire" d="M517,240 C535,240 530,325 548,325"/>
+      <text class="sub" x="625" y="196" text-anchor="middle">Text: cross-entropy loss</text><text class="sub" x="625" y="216" text-anchor="middle">Frames: reinforcement learning</text>
+    </g>
+    <g class="f">
+      <rect class="box ours" x="730" y="50" width="200" height="90"/><text x="830" y="86" text-anchor="middle">Sentence scores</text><text class="sub" x="830" y="108" text-anchor="middle">0 to 1 for every sentence</text>
+      <rect class="box ours" x="730" y="280" width="200" height="90"/><text x="830" y="316" text-anchor="middle">Key frames</text><text class="sub" x="830" y="338" text-anchor="middle">highest-scoring seconds</text>
+      <path class="wire hot" d="M700,95 H728"/><path class="wire hot" d="M700,325 H728"/>
+    </g>
+  </svg>
+  <aside data-notes><h4>The big idea</h4><p>The architecture of M2SM, the first paper. It turns three inputs into numbers, reads each in order with BiLSTMs, connects them with attention, combines opinions with late+ fusion, and gives two outputs: a score for every sentence and the key frames. The diagram builds in five steps.</p><h4>Words to know</h4><ul><li><b>GloVe</b>: a ready-made 'dictionary' where each word is a list of 100 numbers, and words with similar meanings get similar numbers.</li><li><b>LSTM</b>: a network that reads a sequence one item at a time and remembers what came before.</li><li><b>BiLSTM</b>: two LSTMs: one reads forwards, one backwards. So every item knows what comes before and after it.</li><li><b>Word BiLSTM / sentence BiLSTM</b>: the first reads the words of one sentence and makes one vector for the sentence. The second reads the sentences of the article in order.</li><li><b>Attention</b>: a way for one item to decide which other items to focus on, by giving every pair a match score.</li><li><b>Bi-hop attention</b>: a sentence reaches the video in two hops: sentence → transcript → frame. The transcript is the bridge, because it is words (like the article) and tied to the video's timeline.</li><li><b>Late+ fusion</b>: combines the text's opinion and the video's opinion about each sentence, turning each down a bit when the other is already confident.</li><li><b>Cross-entropy loss</b>: the training signal for sentences: it measures how wrong the model's yes/no guess was.</li><li><b>Reinforcement learning</b>: learning by trial and error with a reward, used for picking frames because there are no frame labels.</li></ul><h4>What to say</h4><p class="say">This is M2SM. Step one: everything becomes numbers, words through GloVe and video frames through ResNet-50. Step two: BiLSTMs read each sequence forwards and backwards. Step three: attention connects the sources, and the transcript is the bridge between text and video. Step four: late+ fusion combines the text and video opinions. Step five: we get a score for every sentence, trained with cross-entropy, and key frames, trained with reinforcement learning.</p><h4>If the jury asks</h4><ul><li><b>Why use the transcript as a bridge?</b> Text and pictures are hard to compare directly. The transcript is text, so it matches the article, and it belongs to the video's timeline, so it matches the frames.</li><li><b>What is 'bi-stream'?</b> Training the sentence part and the frame part together, so each can help the other.</li><li><b>How many parameters?</b> About 3.5 million in our version.</li></ul></aside>
+</section>
+
+<!-- 7b: M2SM numbers -->
+<section class="slide">
+  <p class="kicker gold">M2SM in numbers · one real story</p>
+  <h2 class="tight">What our trained M2SM produced, and how it learned</h2>
+  <div class="example-row">
+    <svg class="diagram example f" viewBox="-2 8 274 184" role="img" aria-label="Sentence scores for the Boris Johnson story">
+<rect class="box ours" x="0" y="12" width="268" height="176"/>
+      <text x="14" y="38">Sentence scores</text><text class="sub" x="14" y="54">Boris Johnson story (test set)</text>
+      <text class="sub" x="14" y="76">#1</text><rect x="42" y="67" width="120" height="9" rx="2" fill="#263b44"/><rect x="42" y="67" width="91" height="9" rx="2" fill="#d95926"/><text class="sub" x="170" y="76">0.76</text><text class="sub" x="14" y="97">#2</text><rect x="42" y="88" width="120" height="9" rx="2" fill="#263b44"/><rect x="42" y="88" width="88" height="9" rx="2" fill="#d95926"/><text class="sub" x="170" y="97">0.73</text><text class="sub" x="214" y="97" fill="#ffb08f">← key</text><text class="sub" x="14" y="118">#3</text><rect x="42" y="109" width="120" height="9" rx="2" fill="#263b44"/><rect x="42" y="109" width="76" height="9" rx="2" fill="#d95926"/><text class="sub" x="170" y="118">0.63</text><text class="sub" x="14" y="139">#4</text><rect x="42" y="130" width="120" height="9" rx="2" fill="#263b44"/><rect x="42" y="130" width="54" height="9" rx="2" fill="#d95926"/><text class="sub" x="170" y="139">0.45</text><text class="sub" x="14" y="160">#5</text><rect x="42" y="151" width="120" height="9" rx="2" fill="#263b44"/><rect x="42" y="151" width="30" height="9" rx="2" fill="#5d6f74"/><text class="sub" x="170" y="160">0.25</text>
+      <text class="sub" x="14" y="180">orange = picked (top 4) · key = authors' answer</text>
+    </svg>
+    <svg class="diagram example f" viewBox="-2 233 274 184" role="img" aria-label="Top key frames for the Boris Johnson story">
+<rect class="box ours" x="0" y="242" width="268" height="166"/>
+      <text x="14" y="268">Top key frames</text><text class="sub" x="14" y="284">second of video · score</text>
+      <text class="sub" x="14" y="306">7 s</text><rect x="52" y="297" width="120" height="9" rx="2" fill="#263b44"/><rect x="52" y="297" width="103" height="9" rx="2" fill="#d95926"/><text class="sub" x="180" y="306">0.86</text><text class="sub" x="14" y="327">8 s</text><rect x="52" y="318" width="120" height="9" rx="2" fill="#263b44"/><rect x="52" y="318" width="103" height="9" rx="2" fill="#d95926"/><text class="sub" x="180" y="327">0.86</text><text class="sub" x="14" y="348">9 s</text><rect x="52" y="339" width="120" height="9" rx="2" fill="#263b44"/><rect x="52" y="339" width="103" height="9" rx="2" fill="#d95926"/><text class="sub" x="180" y="348">0.86</text><text class="sub" x="14" y="369">14 s</text><rect x="52" y="360" width="120" height="9" rx="2" fill="#263b44"/><rect x="52" y="360" width="103" height="9" rx="2" fill="#d95926"/><text class="sub" x="180" y="369">0.86</text>
+      <text class="sub" x="14" y="398">All bunched together: weak variety</text>
+    </svg>
+  </div>
+  <div class="train row">
+    <div class="card m2sm f"><h3>Cross-entropy, worked example</h3>
+      <p>Sentence 2 <b class="hi">is</b> key (label 1); model says 0.73 → loss = −ln 0.73 = <b class="hi">0.31</b> (small).<br>
+      Sentence 1 <b class="hi">isn't</b> (label 0); model says 0.76 → loss = −ln(1 − 0.76) = <b class="hi">1.43</b> (big penalty).</p></div>
+    <div class="card m2sm f"><h3>Training log · 8 epochs, ≈160 s each</h3>
+      <table class="mini"><thead><tr><th>Epoch</th><th>1</th><th>3</th><th>5</th><th>8</th></tr></thead>
+        <tbody><tr><td>Training loss</td><td>0.375</td><td>0.329</td><td>0.283</td><td>0.187</td></tr>
+        <tr><td>Validation R-1</td><td>41.08</td><td class="best">41.35</td><td>41.45</td><td>39.59</td></tr></tbody></table>
+      <p>Loss keeps falling, but validation gets worse after epoch 5: <b class="hi">overfitting</b>. Kept: epoch 3, the best average of R-1, R-2 and R-L.</p></div>
+    <div class="card m2sm f"><h3>Frame reward (reinforcement learning)</h3>
+      <p>Average reward per video: <b class="hi">1.159</b> (epoch 1) → <b class="hi">1.187</b> (epoch 3).<br>Reward = diversity + representativeness: higher means the picked frames differ more and cover the video better.</p></div>
+  </div>
+  <aside data-notes><h4>The big idea</h4><p>Real numbers from our trained M2SM on the Boris Johnson test story, and from its training. It shows the model's habit of picking the opening sentences, its weak frame variety, how cross-entropy punishes mistakes, and overfitting.</p><h4>Words to know</h4><ul><li><b>Score 0 to 1</b>: how important the model thinks a sentence is. 1 = definitely key.</li><li><b>Epoch</b>: one full pass over all training stories.</li><li><b>Training loss</b>: how wrong the model is on the training data. Lower is better.</li><li><b>Overfitting</b>: when a model memorises the training data instead of learning general patterns: training loss keeps going down but the validation score gets worse.</li><li><b>−ln (negative natural log)</b>: the maths behind cross-entropy. A confident right answer gives a small number; a confident wrong answer gives a big one.</li><li><b>Reward</b>: the score the reinforcement learner tries to increase. Here: how varied and representative the chosen frames are.</li></ul><h4>What to say</h4><p class="say">Here is M2SM working on one real test story. It gave the first four sentences the highest scores and picked them. The journalist's answer key marks only sentence 2 as key, so it got one right and added three: it copies the opening. Its top frames are all between 7 and 14 seconds with the same score, so they lack variety. Below: cross-entropy gives a small penalty, 0.31, for a confident correct answer and a big one, 1.43, for a confident wrong answer. The training log shows overfitting: loss keeps falling, but the validation score gets worse after epoch 5, so we kept epoch 3.</p><h4>If the jury asks</h4><ul><li><b>Why did it pick the first sentences?</b> Because in news the first sentences usually are the most important (slide 11). The model learned that shortcut.</li><li><b>How did you choose epoch 3?</b> It had the best average of ROUGE-1, ROUGE-2 and ROUGE-L on the validation set. We never look at the test set to choose.</li></ul></aside>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <p class="kicker gold">M2SM · the key equations, in plain words</p>
+  <h2>Three ideas we implemented line by line</h2>
+  <div class="row">
+    <div class="card m2sm f"><h3>Bilinear attention</h3>
+      <p class="eq" style="margin:10px 0">score = v · (q ⊙ k + q + k)</p>
+      <p>A sentence (q) and a frame (k) are compared both by multiplying and by adding, so the model sees how strongly they match.</p></div>
+    <div class="card m2sm f"><h3>Late+ fusion</h3>
+      <p class="eq" style="margin:10px 0">text × (1 − video)<sup>β</sup></p>
+      <p>Each source's score is scaled down when the other source is confident, so one source can't drown out the other. β = 0.3.</p></div>
+    <div class="card m2sm f"><h3>Video reward</h3>
+      <p class="eq" style="margin:10px 0">R = R<sub>diversity</sub> + R<sub>representative</sub></p>
+      <p>Chosen frames should differ from each other and stand for the whole video.</p></div>
+  </div>
+  <aside data-notes><h4>The big idea</h4><p>The three key formulas of M2SM, explained in words. You don't need to derive them; you need to say what each one does.</p><h4>Words to know</h4><ul><li><b>q and k</b>: two lists of numbers being compared: for example q is a sentence and k is a frame.</li><li><b>⊙ (element-wise multiply)</b>: multiply the two lists position by position. High when both are strong in the same places, so it measures agreement.</li><li><b>β (beta)</b>: a small setting (0.3) that controls how strongly late+ fusion turns one source down when the other is confident.</li><li><b>Diversity reward</b>: high when the chosen frames are different from each other.</li><li><b>Representativeness reward</b>: high when the chosen frames cover the whole video well.</li></ul><h4>What to say</h4><p class="say">These are the three ideas we implemented line by line. Bilinear attention scores a sentence and a frame both by multiplying them, to see if they agree, and by adding them, to see how important each one is. Late+ fusion turns each source down a little when the other is already confident, so neither dominates. And the video reward makes chosen frames varied and representative of the whole video.</p><h4>If the jury asks</h4><ul><li><b>Why multiply and add?</b> Multiplying captures whether the two match; adding captures how important each one is on its own. Using both is what the paper calls dual interaction.</li><li><b>Did late+ fusion help?</b> In our hybrid, switching it off changed nothing (−0.01 ROUGE-1). We say that honestly.</li></ul></aside>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <p class="kicker gold">Rebuilding M2SM · what happened</p>
+  <h2>The rebuild worked, but video didn't help</h2>
+  <table class="t">
+    <thead><tr><th>Model (Daily Mail test, 387 stories)</th><th>ROUGE-1</th><th>ROUGE-2</th><th>ROUGE-L</th></tr></thead>
+    <tbody>
+      <tr class="paper f"><td>M2SM, as reported in the paper</td><td>41.73</td><td>18.59</td><td>31.68</td></tr>
+      <tr class="f"><td>Lead3: just the first 3 sentences</td><td>40.72</td><td>17.73</td><td>30.71</td></tr>
+      <tr class="ours f"><td>Our M2SM, text only</td><td>41.23</td><td>18.03</td><td>31.05</td></tr>
+      <tr class="ours f"><td>Our M2SM, text + video + transcript</td><td>40.10</td><td>17.81</td><td>30.88</td></tr>
+    </tbody>
+  </table>
+  <p class="f" style="margin-top:18px">With the paper's learning rate, the model simply copied the article's opening sentences in <b class="hi">99.5–100%</b> of stories. A 100× higher rate made it learn, and we report that change openly.</p>
+  <aside data-notes><h4>The big idea</h4><p>What happened when we rebuilt M2SM. The rebuild works, but the paper's main claim, that video helps, did not reproduce. Our text-only version beat our full version. We also had to change the learning rate.</p><h4>Words to know</h4><ul><li><b>Lead3</b>: a very simple baseline: just take the first 3 sentences of the article.</li><li><b>Learning rate</b>: how big a step the model takes when it learns from a mistake. The paper used 0.0001; we used 0.01, which is 100 times bigger.</li><li><b>Reproduce</b>: get the same result as the paper by following its method.</li></ul><h4>What to say</h4><p class="say">Our rebuild works and lands close to the paper's numbers, but the main claim did not reproduce: our text-only version scores higher than our full version with video and transcript. We also found that with the paper's learning rate, the model just copied the first sentences in almost every story. With a learning rate 100 times bigger it actually learned. We report that change openly.</p><h4>If the jury asks</h4><ul><li><b>Why didn't your numbers match exactly?</b> Small differences add up: we used one frame per second, batch size 1, a CPU, and some details the paper doesn't specify. All differences are listed in our report.</li><li><b>Isn't changing the learning rate cheating?</b> No. We chose it on the validation set, never the test set, and we report both settings.</li></ul></aside>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <p class="kicker">Why "the first 3 sentences" is so hard to beat</p>
+  <h2>Journalists put the key facts first</h2>
+  <p class="lead">How often a sentence is a key sentence, by its position (1,359 training articles):</p>
+  <div class="bars">
+    <div class="bar f"><span class="name">Sentence 1</span><span class="track"><i data-w="82.7" style="background:var(--blue)"></i></span><span class="val">82.7%</span></div>
+    <div class="bar f"><span class="name">Sentence 2</span><span class="track"><i data-w="67.3" style="background:var(--blue)"></i></span><span class="val">67.3%</span></div>
+    <div class="bar f"><span class="name">Sentence 3</span><span class="track"><i data-w="47.5" style="background:var(--blue)"></i></span><span class="val">47.5%</span></div>
+    <div class="bar f"><span class="name">Sentence 5</span><span class="track"><i data-w="21.6" style="background:var(--blue)"></i></span><span class="val">21.6%</span></div>
+    <div class="bar f"><span class="name">Sentence 10</span><span class="track"><i data-w="11.6" style="background:var(--blue)"></i></span><span class="val">11.6%</span></div>
+    <div class="bar f"><span class="name">Sentence 20</span><span class="track"><i data-w="5.5" style="background:var(--blue)"></i></span><span class="val">5.5%</span></div>
+  </div>
+  <aside data-notes><h4>The big idea</h4><p>This chart explains most of our results. In news, the first sentences are almost always the most important, so 'just take the first sentences' is very hard to beat.</p><h4>Words to know</h4><ul><li><b>Inverted pyramid</b>: how journalists write: the most important facts first, details later.</li><li><b>Lead bias</b>: the tendency for key information to be at the start of a news article. Models learn it quickly.</li></ul><h4>What to say</h4><p class="say">Here is why the first three sentences are so hard to beat. In our training articles, sentence 1 is a key sentence 83% of the time, sentence 2 about 67%, and by sentence 20 it's only about 5%. Journalists write the most important facts first. So a model gets most of the way by learning 'pick the first sentences', and any new idea has to beat that habit.</p><h4>If the jury asks</h4><ul><li><b>So is the model useless?</b> No. It learns the same pattern a good reader would. But it means improvements are small, and we need careful tests to see them.</li></ul></aside>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <p class="kicker teal">Research paper 2 · A2Summ (He et al., CVPR 2023)</p>
+  <h2>A newer design: one transformer for everything</h2>
+  <div class="cols-2">
+    <div class="card a2 f"><h3>Unified transformer</h3><p>Sentences and frames become one sequence. Attention lets every item look at every other item at once, instead of reading in order.</p></div>
+    <div class="card a2 f"><h3>Shared attention, separate experts</h3><p>One attention layer for all, but a separate feed-forward network for text and for video ("mixture of modality experts").</p></div>
+    <div class="card a2 f"><h3>Contrastive learning</h3><p>Matching text and video are pulled together; key and non-key items are pushed apart, both across stories and within one story.</p></div>
+    <div class="card a2 f"><h3>Time alignment</h3><p>Text may only attend to video from the same moment. But news articles have no timestamps, so A2Summ <b>couldn't use this on Daily Mail</b>.</p></div>
+  </div>
+  <aside data-notes><h4>The big idea</h4><p>The second paper, A2Summ (CVPR 2023). Four ideas: one transformer for text and video together, shared attention with separate expert layers, contrastive learning, and time alignment, which it could not use on news articles because articles have no timestamps.</p><h4>Words to know</h4><ul><li><b>Transformer</b>: a model where every item can look at every other item at the same time, through attention. It's the architecture behind ChatGPT.</li><li><b>Token</b>: one item in the transformer's input: here, one sentence or one video frame.</li><li><b>Feed-forward network (FFN)</b>: after attention, each item 'thinks alone': its numbers are expanded, filtered and shrunk back.</li><li><b>Mixture of modality experts</b>: a separate FFN for each type of input (text, video), so each can specialise.</li><li><b>Contrastive learning</b>: training by comparison: matching pairs (a story's text and its own video) are pulled together; non-matching ones are pushed apart.</li><li><b>Time alignment</b>: text may only look at video from the same moment.</li></ul><h4>What to say</h4><p class="say">A2Summ is a newer design. It puts sentences and frames into one transformer, where everything can look at everything at once. Attention is shared, but text and video each get their own expert layer. It uses contrastive learning to make matching text and video agree. And it has time alignment, but news articles have no timestamps, so A2Summ couldn't use it on our dataset. That's the gap we filled.</p><h4>If the jury asks</h4><ul><li><b>What is a CVPR paper?</b> CVPR is one of the top computer-vision conferences. It's a strong, recent reference.</li><li><b>Why is a transformer better than a BiLSTM?</b> Information can travel between any two items in one step instead of passing along a chain, and it trains well on modern hardware. Order has to be added with position markers.</li></ul></aside>
+</section>
+
+<!-- 11 -->
+<section class="slide">
+  <p class="kicker teal">Reading A2Summ's code carefully</p>
+  <h2>Three things we noticed</h2>
+  <div class="row">
+    <div class="card a2 f"><h3>Model picked on the test set</h3><p>Their training script chose the best checkpoint by scoring the test set every epoch. Scores chosen this way look better than they are.</p></div>
+    <div class="card a2 f"><h3>Summary length from the answer</h3><p>At test time, each summary's length was set to the number of correct sentences, which a real system can't know.</p></div>
+    <div class="card a2 f"><h3>Two layers were one</h3><p>Their "2 layers" reuse the same layer twice (a Python list quirk). We used two real layers.</p></div>
+  </div>
+  <p class="f small" style="margin-top:18px">We report A2Summ's 44.11 ROUGE-1 for reference, but don't compare our numbers with it directly.</p>
+  <aside data-notes><h4>The big idea</h4><p>We read A2Summ's public code and found three details that make its reported score look better than a strict test would. This shows we check evidence rather than trusting numbers. Present it respectfully: these are common shortcuts, not misconduct.</p><h4>Words to know</h4><ul><li><b>Checkpoint</b>: a saved copy of the model at one point during training.</li><li><b>Checkpoint selection on the test set</b>: keeping the version that scored best on the test set. It makes the test score optimistic, because the test helped choose the model.</li><li><b>Early stopping</b>: stopping training when the validation score stops improving. Good practice, as long as the validation set (not the test set) is used.</li><li><b>Summary length</b>: how many sentences to pick. A real system must choose this without seeing the answer.</li></ul><h4>What to say</h4><p class="say">Reading A2Summ's code, we noticed three things. First, the best model was chosen by scoring the test set every epoch. Second, each summary's length was set to the number of correct sentences, which a real system can't know. Third, their two layers were actually one layer used twice, because of a Python detail. So we report their 44.11 for reference, but our evaluation is stricter and we don't compare with it directly.</p><h4>If the jury asks</h4><ul><li><b>How do you know?</b> Their training script on GitHub scores the test split every epoch to save the best model, and their evaluation uses the number of correct labels as the summary length.</li><li><b>How much does the length hint matter?</b> Our hybrid scores 40.05 ROUGE-1 our way and 41.66 with their length rule, so about 1.6 points come from the hint alone.</li></ul></aside>
+</section>
+
+<!-- 12 -->
+<section class="slide">
+  <p class="kicker">Our hybrid model</p>
+  <h2>The best of both papers, plus <em>speech with timestamps</em></h2>
+  <svg class="diagram" viewBox="0 0 1000 430" role="img" aria-label="Hybrid architecture">
+    <g class="f">
+      <rect class="box input" x="10" y="30" width="150" height="58"/><text x="85" y="56" text-anchor="middle">Article sentences</text><text class="sub" x="85" y="74" text-anchor="middle">RoBERTa · 768 each</text>
+      <rect class="box input" x="10" y="186" width="150" height="58"/><text x="85" y="212" text-anchor="middle">Video frames</text><text class="sub" x="85" y="230" text-anchor="middle">ResNet-50 · 1 per second</text>
+      <rect class="box ours" x="10" y="342" width="150" height="58"/><text x="85" y="368" text-anchor="middle">Speech sentences</text><text class="sub" x="85" y="386" text-anchor="middle">Whisper + times</text>
+    </g>
+    <g class="f">
+      <rect class="box gold" x="210" y="30" width="140" height="58"/><text x="280" y="56" text-anchor="middle">Sentence BiLSTM</text><text class="sub" x="280" y="74" text-anchor="middle">keeps article order</text>
+      <path class="wire" d="M160,59 H208"/>
+    </g>
+    <g class="f">
+      <rect class="box teal" x="394" y="4" width="282" height="418" style="fill:none"/>
+      <text x="535" y="26" text-anchor="middle">Transformer · 2 stacked layers</text>
+      <rect class="box teal" x="408" y="38" width="254" height="150"/>
+      <text x="422" y="62">Layer 1</text>
+      <rect class="box teal" x="422" y="74" width="226" height="50"/><text x="535" y="95" text-anchor="middle">Shared attention</text><text class="sub" x="535" y="113" text-anchor="middle" style="fill:#ffb08f">+ time-alignment mask (ours)</text>
+      <rect class="box teal" x="422" y="134" width="70" height="40"/><text class="sub" x="457" y="158" text-anchor="middle">text FFN</text>
+      <rect class="box teal" x="500" y="134" width="70" height="40"/><text class="sub" x="535" y="158" text-anchor="middle">video FFN</text>
+      <rect class="box teal" x="578" y="134" width="70" height="40"/><text class="sub" x="613" y="158" text-anchor="middle">speech FFN</text>
+      <path class="wire" d="M350,59 C378,59 372,96 406,96"/><path class="wire" d="M160,215 C300,215 350,140 406,140"/><path class="wire" d="M160,371 C320,371 360,175 406,175"/>
+    </g>
+    <g class="f">
+      <path class="wire" d="M535,188 V218"/><text class="sub" x="527" y="208" text-anchor="end">output feeds layer 2</text>
+      <rect class="box teal" x="408" y="222" width="254" height="150"/>
+      <text x="422" y="246">Layer 2</text>
+      <rect class="box teal" x="422" y="258" width="226" height="50"/><text x="535" y="279" text-anchor="middle">Shared attention</text><text class="sub" x="535" y="297" text-anchor="middle" style="fill:#ffb08f">+ time-alignment mask (ours)</text>
+      <rect class="box teal" x="422" y="318" width="70" height="40"/><text class="sub" x="457" y="342" text-anchor="middle">text FFN</text>
+      <rect class="box teal" x="500" y="318" width="70" height="40"/><text class="sub" x="535" y="342" text-anchor="middle">video FFN</text>
+      <rect class="box teal" x="578" y="318" width="70" height="40"/><text class="sub" x="613" y="342" text-anchor="middle">speech FFN</text>
+      <text class="sub" x="535" y="390" text-anchor="middle" style="fill:#c9c2f7">Bridge (article → speech → frame):</text>
+      <text class="sub" x="535" y="406" text-anchor="middle" style="fill:#c9c2f7">layer 1: speech sees its frames · layer 2: article sees speech</text>
+    </g>
+    <g class="f">
+      <rect class="box gold" x="720" y="60" width="150" height="62"/><text x="795" y="88" text-anchor="middle">Late+ fusion</text><text class="sub" x="795" y="108" text-anchor="middle">sentence scores</text>
+      <rect class="box teal" x="720" y="300" width="150" height="62"/><text x="795" y="328" text-anchor="middle">Frame head</text><text class="sub" x="795" y="348" text-anchor="middle">key frames</text>
+      <path class="wire" d="M662,300 C695,300 690,91 718,91"/><path class="wire" d="M662,331 H718"/>
+    </g>
+    <g class="f">
+      <rect class="box teal" x="720" y="168" width="270" height="86"/><text x="855" y="196" text-anchor="middle">Training</text>
+      <text class="sub" x="855" y="218" text-anchor="middle">focal loss on key sentences and frames</text><text class="sub" x="855" y="238" text-anchor="middle">+ two contrastive losses</text>
+      <path class="wire hot" d="M870,91 H930"/><path class="wire hot" d="M870,331 H930"/>
+      <text class="sub" x="960" y="95" text-anchor="middle">summary</text><text class="sub" x="960" y="335" text-anchor="middle">key frames</text>
+    </g>
+  </svg>
+  <div class="legend"><span><i style="background:var(--gold)"></i>From M2SM</span><span><i style="background:var(--teal)"></i>From A2Summ</span><span><i style="background:var(--accent)"></i>Our addition</span></div>
+  <aside data-notes><h4>The big idea</h4><p>Our own model. It combines parts of M2SM (violet), parts of A2Summ (green) and our own additions (orange). The transformer is drawn as two stacked layers; the second layer is what lets the article receive video information through speech.</p><h4>Words to know</h4><ul><li><b>RoBERTa</b>: a large pretrained transformer that turns a sentence into 768 numbers. We use it as-is (frozen).</li><li><b>Transfer learning</b>: reusing a model someone else already trained on huge data, instead of training from scratch.</li><li><b>Time-alignment mask</b>: a table of allowed and blocked connections inside attention: a spoken sentence may only look at frames from its own time.</li><li><b>Focal loss</b>: a version of cross-entropy that pays extra attention to hard examples.</li><li><b>Two stacked layers</b>: the transformer's attention-then-experts step happens twice; layer 1's output is layer 2's input.</li><li><b>Parameters</b>: the numbers a model learns. Our hybrid has about 6 million.</li></ul><h4>What to say</h4><p class="say">This is our hybrid. Article sentences become numbers with RoBERTa, and a BiLSTM from M2SM keeps their order. Frames come from ResNet-50, and speech comes from Whisper with timestamps, which is our addition. Everything goes into a two-layer transformer from A2Summ, with shared attention and a separate expert for text, video and speech. Inside attention is our time-alignment mask. Two layers make the bridge work: in layer 1 speech takes in its frames, and in layer 2 the article reads that speech. At the end, late+ fusion from M2SM scores the sentences, and a frame head picks key frames. It's trained with focal loss and contrastive losses, about 6 million parameters, on a laptop CPU.</p><h4>If the jury asks</h4><ul><li><b>What exactly is new here?</b> Combining the two papers, adding speech as a third input, and bringing A2Summ's time alignment to news through Whisper's timestamps.</li><li><b>Why keep the BiLSTM?</b> Sentence order matters in news. Our ablation showed the transformer alone did about as well, which we report honestly.</li><li><b>How long did training take?</b> About 30 to 50 seconds per epoch on the laptop CPU. Each run stopped automatically after 17 to 35 epochs, when the validation score had not improved for 10 epochs.</li></ul></aside>
+</section>
+
+<!-- 13 -->
+<section class="slide">
+  <p class="kicker">Our idea · time alignment through speech</p>
+  <h2>Speech only "looks at" frames from the same moment</h2>
+  <p class="lead f">Whisper gives every spoken sentence a start and end time. We turned that into an attention rule.</p>
+  <div class="timeline f">
+    <span class="lane-label" style="top:0">Speech</span>
+    <div class="lane" style="top:0">
+      <span class="speech-seg" data-frames="0-2" style="left:1%;width:22%"></span>
+      <span class="speech-seg" data-frames="3-5" style="left:26%;width:24%"></span>
+      <span class="speech-seg" data-frames="6-8" style="left:51%;width:24%"></span>
+      <span class="speech-seg" data-frames="9-11" style="left:76%;width:23%"></span>
+    </div>
+    <span class="lane-label" style="top:64px">Frames</span>
+    <div class="lane" style="top:64px">
+      <span class="frame-cell" style="left:0.3%"></span><span class="frame-cell" style="left:8.6%"></span><span class="frame-cell" style="left:17%"></span>
+      <span class="frame-cell" style="left:25.3%"></span><span class="frame-cell" style="left:33.6%"></span><span class="frame-cell" style="left:42%"></span>
+      <span class="frame-cell" style="left:50.3%"></span><span class="frame-cell" style="left:58.6%"></span><span class="frame-cell" style="left:67%"></span>
+      <span class="frame-cell" style="left:75.3%"></span><span class="frame-cell" style="left:83.6%"></span><span class="frame-cell" style="left:92%"></span>
+    </div>
+    <span class="lane-label" style="top:128px">Time →</span>
+    <p class="small" style="position:absolute;left:110px;top:136px">0 s ··························································································· end of video</p>
+  </div>
+  <p class="f">A2Summ needed timestamped text but news articles have none. <b class="hi">Speech provides the times</b>, which brings A2Summ's alignment idea to news.</p>
+  <aside data-notes><h4>The big idea</h4><p>An animation of our time-alignment idea. Each blue bar is a spoken sentence placed at its time; the frames from the same moment light up. Those are the only frames it is allowed to attend to.</p><h4>Words to know</h4><ul><li><b>Timestamp</b>: the start and end time of a spoken sentence, given by Whisper.</li><li><b>Attention mask</b>: a rule that blocks some connections in attention by forcing their score to zero.</li></ul><h4>What to say</h4><p class="say">Whisper tells us when each sentence was spoken. We turned that into a rule: a spoken sentence may only look at frames from the same moment, with one second of slack. A2Summ needed timestamped text, and news articles don't have any. Speech provides the times, which brings A2Summ's idea to news. We checked it works: changing one spoken sentence from 0 to 7.5 seconds only changed frames 0 to 8, nothing else.</p><h4>If the jury asks</h4><ul><li><b>Did it improve the results?</b> Not measurably: switching it off changed ROUGE-1 by +0.10, which is within noise. The mechanism works, but on this data speech didn't help pick article sentences.</li><li><b>What if speech runs past the end of the video?</b> That sentence is connected to the nearest frame instead.</li></ul></aside>
+</section>
+
+<!-- 14 -->
+<section class="slide">
+  <p class="kicker">How we tested</p>
+  <h2>Fair tests, honest numbers</h2>
+  <div class="row">
+    <div class="card f"><h3>ROUGE-1 / 2 / L</h3><p>Shared single words, word pairs, and longest in-order run between our summary and the journalist's.</p></div>
+    <div class="card f"><h3>Cos</h3><p>How similar our chosen frames are to the photos the newspaper published.</p></div>
+    <div class="card f"><h3>Baselines</h3><p>Simple yardsticks: first 3 sentences; random, evenly spaced and clustered (VSUMM) frames.</p></div>
+    <div class="card f"><h3>Bootstrap &amp; ablations</h3><p>Re-sample the 387 test stories 10,000 times to tell real gains from luck; switch parts off one at a time.</p></div>
+  </div>
+  <aside data-notes><h4>The big idea</h4><p>The four tools we used to judge results fairly: ROUGE for summaries, Cos for frames, simple baselines as yardsticks, and statistics plus ablations to tell real gains from luck.</p><h4>Words to know</h4><ul><li><b>ROUGE-1 / ROUGE-2 / ROUGE-L</b>: shared single words, shared word pairs, and the longest run of words in the same order, between our summary and the journalist's. Higher is better.</li><li><b>F1</b>: a balance of precision (how much of our summary is relevant) and recall (how much of the reference we covered). ROUGE scores here are F1.</li><li><b>Cos (cosine similarity)</b>: how similar two lists of numbers point. We compare our chosen frames with the photos the newspaper published.</li><li><b>Baseline</b>: a simple method used as a yardstick, such as lead3 or random frames.</li><li><b>Paired bootstrap</b>: re-sample the 387 test stories 10,000 times and recompute the difference each time. If the difference stays on one side of zero 95% of the time, it is real, not luck.</li><li><b>95% interval</b>: the range the true difference most likely lies in.</li><li><b>Ablation</b>: switching one part off to see how much it contributes.</li></ul><h4>What to say</h4><p class="say">We judged everything with four tools. ROUGE counts how many words our summary shares with the journalist's. Cos measures how close our chosen frames are to the newspaper's photos. Baselines are simple methods every model must beat. And the paired bootstrap tells us whether a difference is real: we re-sample the test stories 10,000 times, and if the gain survives, it counts.</p><h4>If the jury asks</h4><ul><li><b>Isn't ROUGE too simple?</b> Yes, it only counts words, not meaning. That's why we mention human ratings and meaning-based scores as next steps.</li><li><b>Why 10,000 re-samples?</b> It's a standard number that gives stable intervals and is cheap to compute.</li></ul></aside>
+</section>
+
+<!-- 15 -->
+<section class="slide">
+  <p class="kicker">Results · picking sentences</p>
+  <h2>ROUGE-1 on 387 unseen Daily Mail articles</h2>
+  <div class="bars dots">
+    <div class="bar f"><span class="name">Lead3 (first 3 sentences)</span><span class="track"><i data-x="34.0" style="background:var(--blue)"></i></span><span class="val">40.72</span></div>
+    <div class="bar f"><span class="name">Our M2SM, text only</span><span class="track"><i data-x="40.4" style="background:var(--accent)"></i></span><span class="val">41.23</span></div>
+    <div class="bar f"><span class="name">Our M2SM, full</span><span class="track"><i data-x="26.3" style="background:var(--accent)"></i></span><span class="val">40.10</span></div>
+    <div class="bar f"><span class="name">Our hybrid, full</span><span class="track"><i data-x="25.6" style="background:var(--accent)"></i></span><span class="val">40.05</span></div>
+    <div class="bar f"><span class="name">Our hybrid, speech switched off</span><span class="track"><i data-x="40.6" style="background:var(--accent)"></i></span><span class="val">41.25</span></div>
+    <div class="bar f"><span class="name">M2SM paper (their setup)</span><span class="track"><i data-x="46.6" style="background:var(--paper)"></i></span><span class="val">41.73</span></div>
+    <div class="scale"><span></span><span><span>38</span><span>40</span><span>42</span><span>44</span><span>46</span></span><span></span></div>
+  </div>
+  <p class="f small" style="margin-top:16px">Best possible sentence choice ("oracle"): 52.14. Scale runs from 38 to 46 so small gaps are visible.</p>
+  <aside data-notes><h4>The big idea</h4><p>The main results for picking sentences. All models land within about one point of lead3. The full hybrid doesn't beat lead3; the hybrid with speech switched off does, by a significant 0.53. The oracle shows how much room is left.</p><h4>Words to know</h4><ul><li><b>Dot plot</b>: each dot is one model's score on the same scale. The scale starts at 38 so small differences are visible.</li><li><b>Oracle</b>: the best possible choice of sentences, computed using the answer. It is the ceiling (52.14), not a real model.</li><li><b>Significant</b>: the 95% interval of the difference does not include zero, so it's unlikely to be luck.</li></ul><h4>What to say</h4><p class="say">Here are the results on 387 test articles. Lead3 scores 40.72. Our models land within about a point of it. The full hybrid scores 40.05 and doesn't beat lead3. With speech switched off it scores 41.25, a significant gain over lead3. The best possible choice of sentences would score 52, so there is still lots of room to improve.</p><h4>If the jury asks</h4><ul><li><b>So the speech-off model is your best?</b> It scored best on test, but we only found that after testing, so we treat it as a finding to investigate, not a winner we selected. Choosing a winner from test scores would not be fair.</li><li><b>Why is the M2SM paper higher?</b> Their setup differs (frame sampling, training details), and we could not reproduce their gain from video.</li></ul></aside>
+</section>
+
+<!-- 16 -->
+<section class="slide">
+  <p class="kicker">Results · what each part adds (ablations)</p>
+  <h2>Change in ROUGE-1 when one part is switched off</h2>
+  <div class="bars diverge">
+    <div class="bar f"><span class="name">Speech</span><span class="track"><b class="zero"></b><b class="ci" data-span="66.25,27.25"></b><i data-span="50,30" style="background:var(--accent)"></i></span><span class="val">+1.20 *</span></div>
+    <div class="bar f"><span class="name">Video</span><span class="track"><b class="zero"></b><b class="ci" data-span="53,22"></b><i data-span="50,14" style="background:var(--accent)"></i></span><span class="val">+0.56 *</span></div>
+    <div class="bar f"><span class="name">Sentence BiLSTM</span><span class="track"><b class="zero"></b><b class="ci" data-span="49.5,23.5"></b><i data-span="50,11" style="background:var(--accent)"></i></span><span class="val">+0.44</span></div>
+    <div class="bar f"><span class="name">Time alignment</span><span class="track"><b class="zero"></b><b class="ci" data-span="44.5,16"></b><i data-span="50,2.5" style="background:var(--accent)"></i></span><span class="val">+0.10</span></div>
+    <div class="bar f"><span class="name">Contrastive losses</span><span class="track"><b class="zero"></b><b class="ci" data-span="44.75,12.5"></b><i data-span="50,1" style="background:var(--accent)"></i></span><span class="val">+0.04</span></div>
+    <div class="bar f"><span class="name">Late+ fusion</span><span class="track"><b class="zero"></b><b class="ci" data-span="37.75,23.25"></b><i data-span="49.75,0.25" style="background:var(--accent)"></i></span><span class="val">−0.01</span></div>
+    <div class="scale"><span></span><span><span>−2</span><span>0</span><span>+2</span></span><span></span></div>
+  </div>
+  <p class="f small" style="margin-top:14px">Right of the line = better <i>without</i> that part. Thin line = 95% interval. * = real difference, not luck.</p>
+  <aside data-notes><h4>The big idea</h4><p>The ablation chart: what happens when we switch off one part of the hybrid at a time. Right of the line means the model did better without that part. Removing speech and video made it significantly better; the other parts made no measurable difference.</p><h4>Words to know</h4><ul><li><b>Ablation</b>: remove one component and re-train, to measure what it adds.</li><li><b>Thin line (whisker)</b>: the 95% interval. If it doesn't cross zero, the change is real; marked with *.</li><li><b>Noise</b>: an extra input that doesn't help the task and can distract the model.</li></ul><h4>What to say</h4><p class="say">This is the most interesting slide. We switched off one part at a time. Removing speech improved ROUGE-1 by 1.2 points, and removing video by 0.56, both significant. The BiLSTM, time alignment, contrastive losses and late+ fusion made no measurable difference. Our explanation: the journalists' highlights are written from the article, and the video's speech often covers only part of the story, so for choosing article sentences it acts like noise.</p><h4>If the jury asks</h4><ul><li><b>Isn't a negative result bad?</b> No. It's a real finding: for news highlights, the article dominates. Knowing that saves future researchers time.</li><li><b>Could more data or tuning change this?</b> Possibly. We'd test several random seeds and larger contrastive weights next. With one training run per model, small differences could be luck.</li></ul></aside>
+</section>
+
+<!-- 17 -->
+<section class="slide">
+  <p class="kicker">Results · picking key frames</p>
+  <h2>A simple clustering method still wins on frames</h2>
+  <div class="bars dots">
+    <div class="bar f"><span class="name">VSUMM (cluster similar frames)</span><span class="track"><i data-x="80.7" style="background:var(--blue)"></i></span><span class="val">70.46</span></div>
+    <div class="bar f"><span class="name">Evenly spaced frames</span><span class="track"><i data-x="71.0" style="background:var(--blue)"></i></span><span class="val">69.68</span></div>
+    <div class="bar f"><span class="name">M2SM paper (their setup)</span><span class="track"><i data-x="65.2" style="background:var(--paper)"></i></span><span class="val">69.22</span></div>
+    <div class="bar f"><span class="name">Our hybrid</span><span class="track"><i data-x="64.0" style="background:var(--accent)"></i></span><span class="val">69.12</span></div>
+    <div class="bar f"><span class="name">Random frames</span><span class="track"><i data-x="58.4" style="background:var(--blue)"></i></span><span class="val">68.67</span></div>
+    <div class="bar f"><span class="name">Our M2SM rebuild (best)</span><span class="track"><i data-x="53.6" style="background:var(--accent)"></i></span><span class="val">68.29</span></div>
+    <div class="scale"><span></span><span><span>64</span><span>66</span><span>68</span><span>70</span><span>72</span></span><span></span></div>
+  </div>
+  <p class="f small" style="margin-top:14px">Cos: similarity between chosen frames and the newspaper's own photos (higher is better).</p>
+  <aside data-notes><h4>The big idea</h4><p>Results for picking key frames. A simple clustering method, VSUMM, still wins. Our hybrid improves on our M2SM rebuild and comes close to the paper's number, but doesn't beat the simple methods.</p><h4>Words to know</h4><ul><li><b>VSUMM</b>: a classic video-summary method: group similar frames into clusters and pick one frame from each group.</li><li><b>Clustering</b>: grouping similar items together automatically (k-means here).</li><li><b>Uniform</b>: pick frames evenly spaced through the video.</li></ul><h4>What to say</h4><p class="say">For key frames, the simple VSUMM method scores 70.46 and is still the best. Evenly spaced frames score 69.68. Our hybrid scores 69.12, better than our M2SM rebuild at 68.29 and close to the paper's 69.22. The lesson: always compare with simple baselines, because they are often stronger than expected.</p><h4>If the jury asks</h4><ul><li><b>Why does VSUMM do so well?</b> Newspaper photos tend to show different moments of a story. Picking one frame from each group of similar frames naturally covers different moments.</li><li><b>Why not use VSUMM then?</b> For video-only uploads, our app does use VSUMM for frames.</li></ul></aside>
+</section>
+
+<!-- 18 -->
+<section class="slide">
+  <p class="kicker">Extension · video with no article</p>
+  <h2>Summarizing a video from its speech alone</h2>
+  <div class="cols-2">
+    <div>
+      <p class="f">Whisper writes out the speech; the model picks the most important spoken sentences.</p>
+      <div class="stat f"><div class="big">+1.73</div><p>ROUGE-1 over "first 5 spoken sentences" on 254 test videos, a significant gain (17.07 vs 15.34).</p></div>
+    </div>
+    <div>
+      <div class="stat f"><div class="big" style="color:var(--blue)">≈ 16</div><p>Even a perfect choice of spoken sentences scores only about 16 ROUGE-1, against 52 for articles.</p></div>
+      <p class="f small" style="margin-top:12px">Speech covers a narrower slice of the story than the article, so video-only summaries are useful but less complete.</p>
+    </div>
+  </div>
+  <aside data-notes><h4>The big idea</h4><p>An extension: summarizing a video that has no article, using only its speech. It beats the simple speech baseline significantly, but the ceiling is low because speech covers less of the story than the article.</p><h4>Words to know</h4><ul><li><b>Video-only mode</b>: the model reads Whisper's sentences instead of an article.</li><li><b>Ceiling</b>: the best score possible with perfect choices: about 16 ROUGE-1 for speech, against 52 for articles.</li></ul><h4>What to say</h4><p class="say">Sometimes there is only a video. Whisper writes out the speech, and our model picks the most important spoken sentences. On 254 test videos it beats 'take the first five spoken sentences' by 1.73 ROUGE-1, a significant gain. But even a perfect choice of spoken sentences would only score about 16, because the speech covers a narrower part of the story than the article.</p><h4>If the jury asks</h4><ul><li><b>Why so low compared with articles?</b> The journalist's highlights describe the whole article, while the video's speech is often a short clip or interview.</li><li><b>Is it still useful?</b> Yes, for a reader who only has the video it gives the main spoken points, and the app labels it as less reliable.</li></ul></aside>
+</section>
+
+<!-- 19 -->
+<section class="slide" id="abstractive-slide">
+  <p class="kicker">Extension · abstractive summaries</p>
+  <h2>Writing a condensed summary with BART</h2>
+  <div class="cols-2">
+    <div>
+      <p class="f">BART-large-CNN is a pretrained encoder–decoder transformer, trained on CNN/Daily Mail highlights. We used it without retraining (transfer learning).</p>
+      <p class="f"><span class="tag">Encoder: reads the article</span><span class="tag">Decoder: writes word by word</span></p>
+      <p class="f small">Decoding setting (greedy vs. beam search) chosen on 60 validation stories; test scored once.</p>
+    </div>
+    <div id="abstractive-result">
+      <table class="t f">
+        <thead><tr><th>387 test articles</th><th>R-1</th><th>R-2</th><th>R-L</th><th>Words</th></tr></thead>
+        <tbody>
+          <tr><td>Journalist's highlights</td><td>–</td><td>–</td><td>–</td><td>62</td></tr>
+          <tr><td>Lead3 (first 3 sentences)</td><td>40.72</td><td>17.73</td><td>30.71</td><td>74</td></tr>
+          <tr class="ours"><td>BART (abstractive)</td><td>39.31</td><td>16.07</td><td>30.72</td><td>60</td></tr>
+        </tbody>
+      </table>
+      <p class="f small" style="margin-top:12px">BART writes summaries as short as the journalist's. Shorter text shares fewer words, so its ROUGE-1 and ROUGE-2 are lower than lead3's (a real difference), while ROUGE-L is the same. 82% of its word pairs come straight from the article.</p>
+    </div>
+  </div>
+  <aside data-notes><h4>The big idea</h4><p>The abstractive extension. BART-large-CNN is a pretrained model that writes summaries word by word. Its summaries are as short as the journalist's (60 words vs 62), but score a little lower on ROUGE than lead3, partly because shorter text shares fewer words.</p><h4>Words to know</h4><ul><li><b>BART</b>: an encoder–decoder transformer by Facebook AI, trained on CNN/Daily Mail highlights.</li><li><b>Encoder</b>: the part that reads and understands the article.</li><li><b>Decoder</b>: the part that writes the summary one word at a time.</li><li><b>Greedy decoding</b>: always pick the most likely next word. We chose it over beam search on validation.</li><li><b>Beam search</b>: keep several candidate sentences at each step and choose the best overall. Slower.</li><li><b>Novel word pairs</b>: pairs of words in the summary that never appear in the article. Only 18% for BART, so it mostly recombines the article's phrases.</li></ul><h4>What to say</h4><p class="say">Finally, an abstractive model. BART reads the whole article and writes a new summary word by word. We used it without retraining. Its summaries are about 60 words, almost exactly the journalist's 62, while lead3 uses 74. Because ROUGE counts shared words, the shorter BART summary scores a little lower on ROUGE-1 and ROUGE-2, and the same on ROUGE-L. 82% of its word pairs come straight from the article, which is partly why it rarely invents facts.</p><h4>If the jury asks</h4><ul><li><b>Is BART better or worse than your model?</b> On ROUGE-1 it isn't significantly different from our hybrid. To a human reader it often looks better, which shows why ROUGE isn't the whole story.</li><li><b>Can it make mistakes?</b> Yes, abstractive models can state things the article doesn't. That's why the app labels the AI summary and keeps the extractive one next to it.</li><li><b>Was BART trained on your test stories?</b> BART's training articles are from about 2007–2015; our test stories cover 2018–19 events, so overlap is unlikely.</li></ul></aside>
+</section>
+
+<!-- 20 -->
+<section class="slide">
+  <p class="kicker">Live demo</p>
+  <h2>Multimodal News Summarizer: the whole pipeline, running in a browser</h2>
+  <div class="row">
+    <div class="card f"><h3>Sample stories</h3><p>Real test stories: summary, key frames and per-sentence scores.</p></div>
+    <div class="card f"><h3>Your own files</h3><p>Upload an article PDF, a video, or both. Nothing leaves the device.</p></div>
+    <div class="card ours f"><h3>How it works</h3><p>An animated walk-through of every step on a real story.</p></div>
+  </div>
+  <p class="f" style="margin-top:20px"><a class="mono" href="https://multimodal-news-summarizer-app.vercel.app" target="_blank" rel="noopener">multimodal-news-summarizer-app.vercel.app</a></p>
+  <aside data-notes><h4>The big idea</h4><p>Switch to the live app. Show the animated walkthrough first, then a sample story with both summaries, then (if time allows) an upload.</p><h4>Words to know</h4><ul><li><b>Runs in the browser</b>: all models run on the visitor's own device, so uploaded files never leave it.</li><li><b>ONNX</b>: a file format that lets models trained in Python run inside a web browser.</li></ul><h4>What to say</h4><p class="say">Now the live demo. Our app runs the whole pipeline in the browser. 'How it works' is an animated walk-through of every step on a real story. 'Sample stories' shows our summary next to the journalist's, with key frames and an optional AI-written summary. 'Your own files' lets you upload an article, a video or both, and nothing leaves your device.</p><h4>If the jury asks</h4><ul><li><b>Why in the browser?</b> No server to pay for or crash, and privacy: uploaded files stay on the device.</li><li><b>Tip for the presenter</b> Open the app in another tab before you start, and pick the story you practised with.</li></ul></aside>
+</section>
+
+<!-- 21 -->
+<section class="slide">
+  <p class="kicker">What we learned</p>
+  <h2>Takeaways and next steps</h2>
+  <div class="cols-2">
+    <div>
+      <p class="f">Rebuilt a published model and combined two papers into our own design</p>
+      <p class="f">Brought A2Summ's time alignment to news through speech timestamps</p>
+      <p class="f">Tested honestly: baselines, ablations, significance tests</p>
+      <p class="f">Found that, on this data, video and speech don't help pick article sentences</p>
+    </div>
+    <div>
+      <p class="f small">Limitations</p>
+      <p class="f">Single training run per model · ROUGE counts words, not meaning · trained on CPU only</p>
+      <p class="f small" style="margin-top:14px">Next steps</p>
+      <p class="f">Several random seeds · human ratings · meaning-based scores (BERTScore) · fine-tuning the abstractive model on this data</p>
+    </div>
+  </div>
+  <aside data-notes><h4>The big idea</h4><p>Close with what you achieved, what you learned, and what you'd do next. Be confident about the negative result: it is a real finding.</p><h4>Words to know</h4><ul><li><b>Random seed</b>: the starting point of a model's random choices. Running several seeds shows whether a result is stable.</li><li><b>BERTScore</b>: a summary score that compares meaning (using a language model) rather than exact words.</li><li><b>Fine-tuning</b>: continuing to train a pretrained model on your own data.</li></ul><h4>What to say</h4><p class="say">To sum up: we rebuilt a published model, combined two papers into our own design, and brought A2Summ's time alignment to news through speech timestamps. We tested everything honestly with baselines, ablations and significance tests, and found that on this data video and speech don't help pick article sentences. With more time we would run several random seeds, collect human ratings, use meaning-based scores like BERTScore, and fine-tune the abstractive model on this data.</p><h4>If the jury asks</h4><ul><li><b>What was the hardest part?</b> Making the comparison fair: choosing everything on validation, and checking whether differences are real.</li><li><b>What would you do differently?</b> Run several random seeds from the start, so we could say more about small differences.</li></ul></aside>
+</section>
+
+<!-- 22 -->
+<section class="slide">
+  <p class="kicker">Thank you</p>
+  <h1>Questions?</h1>
+  <p class="lead">References: Fu, Wang &amp; Yang (2020), <i>Multi-modal Summarization for Video-containing Documents</i>. He et al. (CVPR 2023), <i>Align and Attend: Multimodal Summarization with Dual Contrastive Losses</i>. Lewis et al. (2020), <i>BART</i>. Liu et al. (2019), <i>RoBERTa</i>. Radford et al. (2022), <i>Whisper</i>.</p>
+  <aside data-notes><h4>The big idea</h4><p>Thank the jury and invite questions. The references are on screen. Below are the questions you are most likely to get, with short answers.</p><h4>What to say</h4><p class="say">Thank you for listening. We're happy to take your questions.</p><h4>If the jury asks</h4><ul><li><b>Why didn't video help?</b> The journalists' highlights are written from the article. The video's speech and pictures often cover only part of the story, so they add little for choosing article sentences.</li><li><b>Why not just use ChatGPT?</b> Our system runs offline in a browser, is measurable on a standard dataset, and its extractive summaries can't invent facts. We also understand and can explain every part of it.</li><li><b>What is novel?</b> The hybrid of M2SM and A2Summ, speech as a third input, and time alignment for news through Whisper's timestamps, plus a careful evaluation that found where published numbers were optimistic.</li><li><b>What did you use from others?</b> Pretrained models (RoBERTa, ResNet-50, Whisper, BART) and the ideas of the two papers, all cited. We wrote our own implementations, training and evaluation.</li><li><b>Did you use AI tools?</b> Answer according to your college's rules, honestly. If declared: we used an AI coding assistant during development, and the team reviewed and understood the design, experiments and results.</li></ul></aside>
+</section>
+
+</main>
+<div class="notes" hidden></div>
+<div class="progress"></div>
+<div class="counter"></div>
+<div class="brand-foot">MULTIMODAL NEWS SUMMARIZER PRESENTATION</div>
+<div class="hint-keys">→ next · ← back · N notes · F full screen</div>
+<script src="deck.js"></script>
+</body>
+</html>

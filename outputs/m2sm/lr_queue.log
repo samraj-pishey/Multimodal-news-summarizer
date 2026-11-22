@@ -1,0 +1,80 @@
+=== text_only_lr0.01 Wed Nov  4 12:31:07 IST 2026
+text_only_lr0.01: train 1359, val 194, 2,145,941 parameters
+  epoch 1: loss 0.3436 val R1/R2/RL 41.30/18.47/31.20 k=4 * (83s)
+  epoch 2: loss 0.3237 val R1/R2/RL 41.24/18.46/31.25 k=4 (85s)
+  epoch 3: loss 0.3015 val R1/R2/RL 41.82/18.29/31.12 k=3 * (83s)
+  epoch 4: loss 0.2604 val R1/R2/RL 40.96/17.69/30.89 k=4 (84s)
+  epoch 5: loss 0.2149 val R1/R2/RL 39.18/16.75/29.64 k=5 (84s)
+  epoch 6: loss 0.1759 val R1/R2/RL 38.54/16.15/28.92 k=5 (86s)
+  epoch 7: loss 0.1453 val R1/R2/RL 38.79/15.70/28.87 k=4 (86s)
+  epoch 8: loss 0.1225 val R1/R2/RL 38.18/15.43/28.48 k=4 (91s)
+{"best_epoch": 3, "test_dailymail": {"n": 387, "r1": 41.228651917690115, "r2": 18.031648363163573, "rl": 31.05147916268043}, "test_cnn": {"n": 204, "r1": 26.532881184096023, "r2": 10.086673787995991, "rl": 20.56602183475024}}
+=== m2sm_full_lr0.01 Wed Nov  4 12:42:38 IST 2026
+m2sm_full_lr0.01: train 1359, val 194, 3,537,690 parameters
+  epoch 1: loss 0.3750 val R1/R2/RL 41.08/18.38/31.21 k=4 * (161s)
+  epoch 2: loss 0.3443 val R1/R2/RL 41.20/18.50/31.19 k=4 * (164s)
+  epoch 3: loss 0.3285 val R1/R2/RL 41.35/18.53/31.38 k=4 * (159s)
+  epoch 4: loss 0.3090 val R1/R2/RL 41.10/18.23/31.14 k=4 (160s)
+  epoch 5: loss 0.2829 val R1/R2/RL 41.45/18.43/31.36 k=4 (162s)
+  epoch 6: loss 0.2511 val R1/R2/RL 41.52/18.12/30.87 k=3 (159s)
+  epoch 7: loss 0.2180 val R1/R2/RL 39.99/16.85/29.84 k=4 (159s)
+  epoch 8: loss 0.1866 val R1/R2/RL 39.59/16.65/29.55 k=4 (163s)
+{"best_epoch": 3, "test_dailymail": {"n": 387, "r1": 40.09886675315128, "r2": 17.813580429751713, "rl": 30.88017714340034}, "test_cnn": {"n": 204, "r1": 23.887737700626666, "r2": 9.252755293251216, "rl": 18.927124048391654}, "test_cos": {"n": 352, "cos": 59.66768887909976}}
+=== text_only_lr0.001 Wed Nov  4 13:04:27 IST 2026
+text_only_lr0.001: train 1359, val 194, 2,145,941 parameters
+  epoch 1: loss 0.3542 val R1/R2/RL 41.08/18.38/31.21 k=4 * (82s)
+  epoch 2: loss 0.3413 val R1/R2/RL 41.08/18.38/31.21 k=4 (82s)
+  epoch 3: loss 0.3397 val R1/R2/RL 41.08/18.38/31.21 k=4 (83s)
+  epoch 4: loss 0.3381 val R1/R2/RL 41.08/18.38/31.21 k=4 (82s)
+  epoch 5: loss 0.3368 val R1/R2/RL 41.08/18.38/31.21 k=4 (82s)
+  epoch 6: loss 0.3355 val R1/R2/RL 41.08/18.38/31.21 k=4 (82s)
+{"best_epoch": 1, "test_dailymail": {"n": 387, "r1": 39.830290621340495, "r2": 17.72930751063894, "rl": 30.689996902086314}, "test_cnn": {"n": 204, "r1": 23.783402957491447, "r2": 8.993947443833568, "rl": 18.720311422909557}}
+=== m2sm_full_lr0.001 Wed Nov  4 13:12:50 IST 2026
+m2sm_full_lr0.001: train 1359, val 194, 3,537,690 parameters
+  epoch 1: loss 0.4696 val R1/R2/RL 41.08/18.38/31.21 k=4 * (156s)
+  epoch 2: loss 0.4137 val R1/R2/RL 41.08/18.38/31.21 k=4 (157s)
+  epoch 3: loss 0.4018 val R1/R2/RL 41.08/18.38/31.21 k=4 (157s)
+  epoch 4: loss 0.3937 val R1/R2/RL 41.08/18.38/31.21 k=4 (158s)
+  epoch 5: loss 0.3845 val R1/R2/RL 41.08/18.38/31.21 k=4 (156s)
+  epoch 6: loss 0.3772 val R1/R2/RL 41.08/18.38/31.21 k=4 (157s)
+{"best_epoch": 1, "test_dailymail": {"n": 387, "r1": 39.830290621340495, "r2": 17.72930751063894, "rl": 30.689996902086314}, "test_cnn": {"n": 204, "r1": 23.783402957491447, "r2": 8.993947443833568, "rl": 18.720311422909557}, "test_cos": {"n": 352, "cos": 68.2911759919741}}
+=== video_early_lr0.01 Wed Nov  4 13:28:53 IST 2026
+video_early_lr0.01: train 1359, val 194, 3,269,653 parameters
+  epoch 1: loss 0.3446 val R1/R2/RL 41.31/18.55/31.22 k=4 * (111s)
+  epoch 2: loss 0.3232 val R1/R2/RL 41.50/18.76/31.53 k=4 * (112s)
+  epoch 3: loss 0.2998 val R1/R2/RL 41.66/18.49/31.42 k=4 (110s)
+  epoch 4: loss 0.2589 val R1/R2/RL 39.68/17.47/30.27 k=5 (110s)
+  epoch 5: loss 0.2157 val R1/R2/RL 38.78/16.49/29.55 k=5 (111s)
+  epoch 6: loss 0.1782 val R1/R2/RL 38.52/16.11/29.01 k=5 (125s)
+  epoch 7: loss 0.1475 val R1/R2/RL 38.30/16.21/29.10 k=5 (114s)
+{"best_epoch": 2, "test_dailymail": {"n": 387, "r1": 40.48538594169, "r2": 18.20896707920616, "rl": 31.150785102773987}, "test_cnn": {"n": 204, "r1": 24.000585917065877, "r2": 9.448068553425877, "rl": 18.960005355346635}}
+=== video_transcript_early_lr0.01 Wed Nov  4 13:42:18 IST 2026
+video_transcript_early_lr0.01: train 1359, val 194, 3,420,949 parameters
+  epoch 1: loss 0.3455 val R1/R2/RL 41.36/18.54/31.34 k=4 * (131s)
+  epoch 2: loss 0.3239 val R1/R2/RL 41.55/18.91/31.59 k=4 * (132s)
+  epoch 3: loss 0.3006 val R1/R2/RL 42.20/18.59/31.49 k=3 * (131s)
+  epoch 4: loss 0.2596 val R1/R2/RL 40.62/17.54/30.57 k=4 (133s)
+  epoch 5: loss 0.2126 val R1/R2/RL 39.20/16.35/29.35 k=4 (6326s)
+  epoch 6: loss 0.1733 val R1/R2/RL 39.12/16.67/29.43 k=5 (3471s)
+  epoch 7: loss 0.1415 val R1/R2/RL 38.53/16.33/29.26 k=5 (132s)
+  epoch 8: loss 0.1173 val R1/R2/RL 38.27/15.94/28.86 k=5 (131s)
+{"best_epoch": 3, "test_dailymail": {"n": 387, "r1": 40.85958654026136, "r2": 17.76442865096906, "rl": 30.713481535928167}, "test_cnn": {"n": 204, "r1": 26.590798375359405, "r2": 9.937300671250139, "rl": 20.412823426218004}}
+=== video_early_lr0.001 Wed Nov  4 16:38:58 IST 2026
+video_early_lr0.001: train 1359, val 194, 3,269,653 parameters
+  epoch 1: loss 0.3544 val R1/R2/RL 41.08/18.38/31.21 k=4 * (111s)
+  epoch 2: loss 0.3387 val R1/R2/RL 41.08/18.38/31.21 k=4 (112s)
+  epoch 3: loss 0.3353 val R1/R2/RL 41.08/18.38/31.21 k=4 (112s)
+  epoch 4: loss 0.3320 val R1/R2/RL 41.08/18.38/31.21 k=4 (114s)
+  epoch 5: loss 0.3291 val R1/R2/RL 41.08/18.38/31.21 k=4 (124s)
+  epoch 6: loss 0.3270 val R1/R2/RL 41.04/18.27/31.13 k=4 (129s)
+{"best_epoch": 1, "test_dailymail": {"n": 387, "r1": 39.830290621340495, "r2": 17.72930751063894, "rl": 30.689996902086314}, "test_cnn": {"n": 204, "r1": 23.783402957491447, "r2": 8.993947443833568, "rl": 18.720311422909557}}
+=== video_transcript_early_lr0.001 Wed Nov  4 16:50:51 IST 2026
+video_transcript_early_lr0.001: train 1359, val 194, 3,420,949 parameters
+  epoch 1: loss 0.3541 val R1/R2/RL 41.08/18.38/31.21 k=4 * (146s)
+  epoch 2: loss 0.3396 val R1/R2/RL 41.08/18.38/31.21 k=4 (133s)
+  epoch 3: loss 0.3362 val R1/R2/RL 41.08/18.38/31.21 k=4 (138s)
+  epoch 4: loss 0.3328 val R1/R2/RL 41.08/18.38/31.21 k=4 (133s)
+  epoch 5: loss 0.3300 val R1/R2/RL 41.08/18.38/31.21 k=4 (132s)
+  epoch 6: loss 0.3278 val R1/R2/RL 41.08/18.38/31.21 k=4 (135s)
+{"best_epoch": 1, "test_dailymail": {"n": 387, "r1": 39.830290621340495, "r2": 17.72930751063894, "rl": 30.689996902086314}, "test_cnn": {"n": 204, "r1": 23.783402957491447, "r2": 8.993947443833568, "rl": 18.720311422909557}}
+LR queue finished Wed Nov  4 17:04:42 IST 2026

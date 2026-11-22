@@ -1,0 +1,129 @@
+{
+ "config": {
+  "name": "speech_video",
+  "regime": "paper",
+  "no_video": false,
+  "no_transcript": true,
+  "no_bistream": true,
+  "attention": "bilinear",
+  "fusion": "early",
+  "beta": 0.3,
+  "alpha_ratio": 3.33,
+  "lr": 0.01,
+  "optimizer": "adagrad",
+  "batch_size": 1,
+  "epochs": 30,
+  "patience": 5,
+  "seed": 42,
+  "threads": 6,
+  "speech": true,
+  "init_from": null,
+  "limit_train": 0,
+  "limit_val": 0,
+  "no_test": false
+ },
+ "best_epoch": 2,
+ "best_val": 11.404535913879615,
+ "history": [
+  {
+   "epoch": 1,
+   "train_loss": 0.3789943486740396,
+   "val": {
+    "r1": 18.16921628942963,
+    "r2": 2.664597371244634,
+    "rl": 13.203994027649928
+   },
+   "val_size": 5,
+   "val_value": 11.345935896108065,
+   "seconds": 33.2173068523407,
+   "reward": null
+  },
+  {
+   "epoch": 2,
+   "train_loss": 0.34137823095290665,
+   "val": {
+    "r1": 18.39836134542543,
+    "r2": 2.6756633304213007,
+    "rl": 13.139583065792115
+   },
+   "val_size": 4,
+   "val_value": 11.404535913879615,
+   "seconds": 33.209927797317505,
+   "reward": null
+  },
+  {
+   "epoch": 3,
+   "train_loss": 0.31642426433043946,
+   "val": {
+    "r1": 18.150461014466345,
+    "r2": 2.561148352653433,
+    "rl": 12.881023426590438
+   },
+   "val_size": 4,
+   "val_value": 11.197544264570071,
+   "seconds": 33.03040099143982,
+   "reward": null
+  },
+  {
+   "epoch": 4,
+   "train_loss": 0.2915569131646616,
+   "val": {
+    "r1": 18.10141791311435,
+    "r2": 2.7220557407004136,
+    "rl": 13.092803474543697
+   },
+   "val_size": 5,
+   "val_value": 11.30542570945282,
+   "seconds": 33.02665328979492,
+   "reward": null
+  },
+  {
+   "epoch": 5,
+   "train_loss": 0.2549796399177292,
+   "val": {
+    "r1": 17.86770062912184,
+    "r2": 2.722976377974188,
+    "rl": 12.916123016020098
+   },
+   "val_size": 5,
+   "val_value": 11.16893334103871,
+   "seconds": 33.62814021110535,
+   "reward": null
+  },
+  {
+   "epoch": 6,
+   "train_loss": 0.223938627591967,
+   "val": {
+    "r1": 17.685418977505446,
+    "r2": 2.5043204668142147,
+    "rl": 12.719680353853171
+   },
+   "val_size": 5,
+   "val_value": 10.969806599390944,
+   "seconds": 32.76820468902588,
+   "reward": null
+  },
+  {
+   "epoch": 7,
+   "train_loss": 0.19802517305379408,
+   "val": {
+    "r1": 17.622226178804915,
+    "r2": 2.4564697687967714,
+    "rl": 12.728828131651545
+   },
+   "val_size": 5,
+   "val_value": 10.935841359751079,
+   "seconds": 33.502341985702515,
+   "reward": null
+  }
+ ],
+ "train_stories": 827,
+ "val_stories": 126,
+ "summary_size": 4,
+ "test_dailymail": {
+  "n": 254,
+  "r1": 17.616165521568377,
+  "r2": 2.65896060107682,
+  "rl": 12.685885789258682
+ }
+}

@@ -1,0 +1,31 @@
+W1120 06:26:11.905000 50485 torch/distributed/elastic/multiprocessing/redirects.py:35] NOTE: Redirects are currently not supported in MacOs.
+[transformers] Please make sure the generation config includes `forced_bos_token_id=0`. 
+Loading weights:   0%|          | 0/511 [00:00<?, ?it/s]Loading weights: 100%|██████████| 511/511 [00:00<00:00, 7050.69it/s]
+  beams 1: 10/60 (6.5s each)
+  beams 1: 20/60 (6.7s each)
+  beams 1: 30/60 (6.5s each)
+  beams 1: 40/60 (6.4s each)
+  beams 1: 50/60 (6.2s each)
+  beams 1: 60/60 (6.0s each)
+  beams 4: 10/60 (14.3s each)
+  beams 4: 20/60 (13.1s each)
+  beams 4: 30/60 (13.1s each)
+  beams 4: 40/60 (13.1s each)
+  beams 4: 50/60 (12.9s each)
+  beams 4: 60/60 (12.4s each)
+{
+ "beams1": {
+  "n": 60,
+  "r1": 40.39,
+  "r2": 17.65,
+  "rl": 26.64,
+  "novel_bigrams": 0.13
+ },
+ "beams4": {
+  "n": 60,
+  "r1": 39.82,
+  "r2": 17.14,
+  "rl": 26.53,
+  "novel_bigrams": 0.05
+ }
+}

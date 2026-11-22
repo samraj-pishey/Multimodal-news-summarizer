@@ -11,3 +11,10 @@ outputs/kaggle_bundle/
 
 # Annotation pages embed images (~8 MB each); rebuild with src/make_annotation.py
 outputs/annotation/*.html
+
+# Sample-story videos (Daily Mail, research use only): local copies for the presentation laptop, never committed or deployed
+sample_videos/
+test_upload/
+
+# Earlier project phase (CLIP captions, report drafts, old demo): kept on this machine only
+_old_phase/

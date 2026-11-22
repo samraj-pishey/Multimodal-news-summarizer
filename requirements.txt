@@ -1,0 +1,18 @@
+# Python 3.12, tested on macOS (Apple silicon). Training runs on CPU.
+torch==2.14.1
+torchvision==0.29.2
+transformers==5.21.0
+numpy==2.5.4
+scipy==1.18.1
+scikit-learn==1.9.1
+rouge-score==0.1.2
+nltk==3.10.4
+av==19.0.2
+pillow==13.0.0
+# Exporting the browser models (src/m2sm_export_*.py)
+onnx
+onnxruntime
+# Whisper transcripts (src/transcribe_audio.py, Apple silicon only)
+mlx-whisper==0.4.3
+soundfile==0.14.0
+soxr==1.1.0

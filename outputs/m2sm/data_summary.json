@@ -1,0 +1,24 @@
+{
+ "stories": 2144,
+ "vocabulary": 19531,
+ "dropped": {
+  "dailymail: no text": 28,
+  "cnn: no text": 5,
+  "dailymail: no video features": 32,
+  "cnn: no video features": 48
+ },
+ "with_transcript": 1090,
+ "split_paper": {
+  "dailymail:train": 1359,
+  "dailymail:test": 387,
+  "dailymail:val": 194,
+  "cnn:test": 204
+ },
+ "split_clean": {
+  "dailymail:train": 1168,
+  "dailymail:None": 306,
+  "dailymail:test": 336,
+  "dailymail:val": 130,
+  "cnn:test": 204
+ }
+}
